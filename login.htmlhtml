@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录注册 - 校园流浪猫守护平台</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑;}
+        body{background:#f5f7fa;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+        .box{width:420px;background:#fff;border-radius:15px;padding:35px;box-shadow:0 5px 20px #ddd;}
+        .tab{display:flex;margin-bottom:25px;border-bottom:1px solid #eee;}
+        .tab span{flex:1;text-align:center;padding:12px;font-size:17px;cursor:pointer;}
+        .tab span.active{color:#ff7875;border-bottom:3px solid #ff7875;}
+        .ipt{width:100%;padding:12px 15px;margin:12px 0;border:1px solid #ccc;border-radius:8px;font-size:15px;}
+        .btn{width:100%;padding:13px;background:#ff7875;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:10px;}
+        .tip{margin-top:15px;font-size:14px;color:#666;text-align:center;}
+        .admin-tip{color:#1890ff;margin-top:10px;text-align:center;}
+        .hide{display:none;}
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="tab">
+            <span class="active" onclick="switchTab(0)">用户登录</span>
+            <span onclick="switchTab(1)">用户注册</span>
+        </div>
+
+        <!-- 登录 -->
+        <div id="loginBox">
+            <input class="ipt" type="text" placeholder="请输入账号" id="loginUser">
+            <input class="ipt" type="password" placeholder="请输入密码" id="loginPwd">
+            <div class="admin-tip">
+                <label><input type="checkbox" id="isAdmin"> 我是管理员登录</label>
+            </div>
+            <button class="btn" onclick="login()">立即登录</button>
+            <p class="tip">普通用户可浏览互动，管理员可查看领养与反馈信息</p>
+        </div>
+
+        <!-- 注册 -->
+        <div id="regBox" class="hide">
+            <input class="ipt" type="text" placeholder="设置账号" id="regUser">
+            <input class="ipt" type="password" placeholder="设置密码" id="regPwd">
+            <input class="ipt" type="password" placeholder="确认密码" id="regPwd2">
+            <button class="btn" onclick="register()">立即注册</button>
+        </div>
+    </div>
+
+<script>
+function switchTab(num){
+    let tab=document.querySelectorAll(".tab span");
+    tab[0].classList.toggle("active",num===0);
+    tab[1].classList.toggle("active",num===1);
+    document.getElementById("loginBox").classList.toggle("hide",num===1);
+    document.getElementById("regBox").classList.toggle("hide",num===0);
+}
+
+// 本地模拟账号
+let userArr=JSON.parse(localStorage.getItem("catUser"))||[];
+let adminAccount={user:"admin",pwd:"123456"};
+
+function register(){
+    let u=document.getElementById("regUser").value.trim();
+    let p=document.getElementById("regPwd").value.trim();
+    let p2=document.getElementById("regPwd2").value.trim();
+    if(!u||!p){alert("账号密码不能为空");return;}
+    if(p!==p2){alert("两次密码不一致");return;}
+    if(userArr.find(v=>v.user===u)){alert("账号已存在");return;}
+    userArr.push({user:u,pwd:p});
+    localStorage.setItem("catUser",JSON.stringify(userArr));
+    alert("注册成功，请登录！");
+    switchTab(0);
+}
+
+function login(){
+    let u=document.getElementById("loginUser").value.trim();
+    let p=document.getElementById("loginPwd").value.trim();
+    let isAdmin=document.getElementById("isAdmin").checked;
+    if(isAdmin){
+        if(u===adminAccount.user&&p===adminAccount.pwd){
+            localStorage.setItem("catRole","admin");
+            alert("管理员登录成功");
+            location.href="admin.html";
+        }else{
+            alert("管理员账号密码错误");
+        }
+    }else{
+        let res=userArr.find(v=>v.user===u&&v.pwd===p);
+        if(res){
+            localStorage.setItem("catRole","user");
+            localStorage.setItem("nowUser",u);
+            alert("登录成功");
+            location.href="index.html";
+        }else{
+            alert("账号密码错误");
+        }
+    }
+}
+</script>
+</body>
+</html>
