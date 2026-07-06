@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能AI助手</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑;}
+        body{background:#f6f7f9;}
+        .nav{background:#232730;padding:16px 0;}
+        .nav-box{max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:45px;}
+        .nav a{color:#fff;text-decoration:none;font-size:17px;}
+        .nav a.active{color:#ff9500;}
+        .container{max-width:1000px;margin:50px auto;padding:0 20px;}
+        h2{text-align:center;font-size:28px;margin-bottom:30px;}
+        .chat-box{height:420px;border:1px solid #ddd;padding:15px;overflow-y:auto;background:#fff;border-radius:10px;margin-bottom:20px;}
+        .user-msg{text-align:right;margin:12px 0;}
+        .ai-msg{text-align:left;margin:12px 0;}
+        .chat-input{width:85%;padding:12px;border:1px solid #ccc;border-radius:8px;}
+        .send-btn{padding:12px 20px;background:#1890ff;color:#fff;border:none;border-radius:8px;cursor:pointer;}
+        footer{background:#232730;color:#fff;text-align:center;padding:35px 0;margin-top:60px;}
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="nav-box">
+            <a href="index.html">首页</a>
+            <a href="archive.html">猫咪档案库</a>
+            <a href="interaction.html">创意互动区</a>
+            <a href="ai.html" class="active">智能助手区</a>
+            <a href="login.html">退出登录</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>猫咪专属智能AI咨询助手</h2>
+        <div class="chat-box" id="chatBox">
+            <div class="ai-msg">AI助手：您好！我可以为您解答猫咪喂养、疾病、习性、救助、日常养护全部问题，直接提问即可~</div>
+        </div>
+        <input class="chat-input" id="chatIn" placeholder="输入你的问题，例如：幼猫怎么喂养">
+        <button class="send-btn" onclick="sendAiMsg()">发送咨询</button>
+    </div>
+
+    <footer>
+        <p>爱心守护团队联系电话：13800138000</p>
+        <p>官方反馈邮箱：catlove@school.com</p>
+    </footer>
+
+<script>
+// 内置知识库，后期直接替换API请求即可
+let aiLib={
+    "喂养":"流浪猫优先喂食猫粮+清水，拒绝人类零食、辛辣食物，定时定点投喂最佳",
+    "生病":"精神差、不吃食、外伤流血尽快隔离，联系救助人员送宠物医院",
+    "绝育":"适龄绝育可以减少疾病，控制流浪猫数量，是科学守护方式",
+    "抚摸":"初次接触不要强行抚摸，慢慢投喂建立信任，优先摸头部下巴",
+    "过冬":"准备纸箱+旧衣物搭建保暖猫窝，放置避风位置，保证水源不结冰"
+};
+
+function sendAiMsg(){
+    let val=document.getElementById("chatIn").value.trim();
+    if(!val)return;
+    let box=document.getElementById("chatBox");
+    box.innerHTML+=`<div class="user-msg">我：${val}</div>`;
+    let res="暂无相关解答，你可以咨询喂养、生病、绝育、过冬相关问题";
+    for(let key in aiLib){
+        if(val.includes(key)){
+            res=aiLib[key];break;
+        }
+    }
+    setTimeout(()=>{
+        box.innerHTML+=`<div class="ai-msg">AI助手：${res}</div>`;
+        box.scrollTop=box.scrollHeight;
+    },300);
+    document.getElementById("chatIn").value="";
+}
+</script>
+</body>
+</html>
