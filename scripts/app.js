@@ -3,8 +3,15 @@
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🐾 校园流浪猫守护平台 v1.0');
+    
     // 加载数据
-    loadData();
+    if (typeof window.loadData === 'function') {
+        window.loadData();
+    } else {
+        console.warn('loadData 未定义，使用全局函数');
+        if (typeof loadData === 'function') loadData();
+    }
 
     // 导航切换
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -14,23 +21,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const pageId = this.dataset.page;
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
+            
             // 切换到互动区时刷新
-            if (pageId === 'pageInteract' && isLoggedIn) {
-                renderVoteAndUpload();
+            if (pageId === 'pageInteract') {
+                const isLoggedIn = window.isLoggedIn || isLoggedIn;
+                if (isLoggedIn && typeof window.renderVoteAndUpload === 'function') {
+                    window.renderVoteAndUpload();
+                }
             }
-            if (pageId === 'pageCats' && isLoggedIn) {
-                renderCats();
+            if (pageId === 'pageCats') {
+                const isLoggedIn = window.isLoggedIn || isLoggedIn;
+                if (isLoggedIn && typeof window.renderCats === 'function') {
+                    window.renderCats();
+                }
             }
         });
     });
 
-    // 如果之前已登录（刷新页面恢复），但这里简单处理
-    // 实际登录状态由 auth.js 管理
+    // 如果已登录（刷新页面时自动恢复）
+    // 由 auth.js 的 enterApp 处理
 });
 
-// 暴露全局函数供其他脚本调用
-window.renderCats = renderCats;
-window.renderVoteAndUpload = renderVoteAndUpload;
-window.updatePopularCat = updatePopularCat;
-window.setupCarousel = setupCarousel;
-window.showAdoptModal = showAdoptModal;
+// 暴露函数供其他脚本调用
+console.log('✅ App 初始化完成');
