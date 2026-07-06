@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>校园流浪猫守护平台</title>
     <style>
+        /* ===== 所有样式 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -1028,15 +1029,12 @@
                     <div class="auth-tab" data-tab="register">注册</div>
                 </div>
                 <div class="auth-form" id="loginForm">
-                    <input type="text" placeholder="账号" id="loginUser" value="">
-                    <input type="password" placeholder="密码" id="loginPass" value="">
+                    <input type="text" placeholder="账号" id="loginUser" value="admin">
+                    <input type="password" placeholder="密码" id="loginPass" value="admin123">
                     <button class="btn-primary" id="loginBtn">登录</button>
                     <div class="auth-extra">
                         <span>忘记密码？</span>
                         <span id="switchToRegister">注册账号</span>
-                    </div>
-                    <div style="margin-top:12px;font-size:12px;color:#999;text-align:center;">
-                        管理员: admin / 密码: admin123
                     </div>
                 </div>
                 <div class="auth-form hidden" id="registerForm">
@@ -1143,10 +1141,8 @@
 
     <script>
         // ================================================================
-        // 数据管理
+        // 数据
         // ================================================================
-
-        // 猫咪数据
         let cats = [
             { id: 1, name: '小橘', gender: '♂', neutered: '已绝育', personality: '粘人', hobby: '晒太阳',
                 img: 'https://placecats.com/300/200?random=2', votes: 12 },
@@ -1166,7 +1162,7 @@
         let isLoggedIn = false;
 
         // ================================================================
-        // localStorage 读写
+        // localStorage
         // ================================================================
         function loadData() {
             try {
@@ -1179,9 +1175,7 @@
                     if (data.cats) cats = data.cats;
                     if (data.comments) comments = data.comments;
                 }
-            } catch (e) {
-                console.warn('加载数据失败', e);
-            }
+            } catch (e) {}
         }
 
         function saveData() {
@@ -1193,9 +1187,7 @@
                     cats,
                     comments
                 }));
-            } catch (e) {
-                console.warn('保存数据失败', e);
-            }
+            } catch (e) {}
         }
 
         function generateId() {
@@ -1203,12 +1195,9 @@
         }
 
         // ================================================================
-        // 登录逻辑
+        // 登录
         // ================================================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🐾 校园流浪猫守护平台 v1.0');
-
-            // 加载数据
             loadData();
 
             // 登录注册切换
@@ -1233,7 +1222,7 @@
                 document.querySelector('.auth-tab[data-tab="login"]').click();
             });
 
-            // ===== 登录 =====
+            // 登录按钮
             document.getElementById('loginBtn').addEventListener('click', function() {
                 const user = document.getElementById('loginUser').value.trim();
                 const pass = document.getElementById('loginPass').value.trim();
@@ -1243,15 +1232,12 @@
                     return;
                 }
 
-                // 读取用户数据
                 let users = {};
                 try {
                     users = JSON.parse(localStorage.getItem('cat_users') || '{}');
-                } catch (e) {
-                    users = {};
-                }
+                } catch (e) {}
 
-                // 检查是否为管理员
+                // 管理员
                 if (user === 'admin' && pass === 'admin123') {
                     currentRole = 'admin';
                     currentUser = user;
@@ -1261,7 +1247,7 @@
                     return;
                 }
 
-                // 普通用户登录
+                // 普通用户
                 if (users[user] && users[user] === pass) {
                     currentRole = 'user';
                     currentUser = user;
@@ -1271,7 +1257,7 @@
                     return;
                 }
 
-                // 如果用户不存在，自动注册并登录
+                // 自动注册
                 if (!users[user]) {
                     users[user] = pass;
                     localStorage.setItem('cat_users', JSON.stringify(users));
@@ -1280,14 +1266,13 @@
                     isLoggedIn = true;
                     loadData();
                     enterApp();
-                    alert('✅ 新用户注册成功！自动登录');
                     return;
                 }
 
                 alert('❌ 密码错误！');
             });
 
-            // ===== 注册 =====
+            // 注册按钮
             document.getElementById('registerBtn').addEventListener('click', function() {
                 const name = document.getElementById('regName').value.trim();
                 const user = document.getElementById('regUser').value.trim();
@@ -1301,9 +1286,7 @@
                 let users = {};
                 try {
                     users = JSON.parse(localStorage.getItem('cat_users') || '{}');
-                } catch (e) {
-                    users = {};
-                }
+                } catch (e) {}
 
                 if (users[user]) {
                     alert('❌ 账号已存在，请直接登录');
@@ -1312,23 +1295,13 @@
 
                 users[user] = pass;
                 localStorage.setItem('cat_users', JSON.stringify(users));
-
-                let userProfiles = {};
-                try {
-                    userProfiles = JSON.parse(localStorage.getItem('cat_profiles') || '{}');
-                } catch (e) {
-                    userProfiles = {};
-                }
-                userProfiles[user] = name;
-                localStorage.setItem('cat_profiles', JSON.stringify(userProfiles));
-
                 alert('✅ 注册成功！请登录');
                 document.querySelector('.auth-tab[data-tab="login"]').click();
                 document.getElementById('loginUser').value = user;
                 document.getElementById('loginPass').value = pass;
             });
 
-            // ===== 退出登录 =====
+            // 退出按钮
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 if (confirm('确定要退出登录吗？')) {
                     isLoggedIn = false;
@@ -1337,12 +1310,10 @@
                     document.getElementById('mainApp').style.display = 'none';
                     document.getElementById('authPanel').style.display = 'flex';
                     document.getElementById('loginPass').value = '';
-                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                    document.querySelector('.nav-item[data-page="pageHome"]').classList.add('active');
                 }
             });
 
-            // ===== 导航切换 =====
+            // 导航切换
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function() {
                     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1359,10 +1330,13 @@
                     }
                 });
             });
+
+            // 如果已登录（刷新恢复）
+            // 简单处理：不自动恢复，需要用户重新登录
         });
 
         // ================================================================
-        // 登录成功后进入应用
+        // 进入应用
         // ================================================================
         function enterApp() {
             document.getElementById('authPanel').style.display = 'none';
@@ -1374,17 +1348,16 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelector('.nav-item[data-page="pageHome"]').classList.add('active');
 
-            // 渲染各模块
             setTimeout(function() {
                 renderCats();
                 renderVoteAndUpload();
                 setupCarousel();
                 updatePopularCat();
-            }, 100);
+            }, 50);
         }
 
         // ================================================================
-        // 首页 - 轮播
+        // 轮播
         // ================================================================
         const carouselImages = [
             'https://placecats.com/800/450?random=5',
@@ -1406,17 +1379,17 @@
         }
 
         // ================================================================
-        // 猫咪档案库
+        // 猫咪档案
         // ================================================================
         function renderCats() {
-            const catListEl = document.getElementById('catList');
-            if (!catListEl) return;
+            const el = document.getElementById('catList');
+            if (!el) return;
 
             let html = '';
             cats.forEach(cat => {
-                const feedbackList = (feedbacks[cat.id] || []).map(f => `<div>• ${f}</div>`).join('');
+                const fbList = (feedbacks[cat.id] || []).map(f => `<div>• ${f}</div>`).join('');
                 html += `
-                        <div class="cat-card" data-catid="${cat.id}">
+                        <div class="cat-card">
                             <img src="${cat.img}" alt="${cat.name}">
                             <div class="info">
                                 <span class="name">${cat.name} (${cat.gender})</span>
@@ -1431,12 +1404,12 @@
                             <div class="feedback-box" id="feedback-${cat.id}" style="display:none;">
                                 <textarea placeholder="添加关于 ${cat.name} 的反馈..." rows="2"></textarea>
                                 <button class="submit-feedback" data-id="${cat.id}">提交反馈</button>
-                                <div class="feedback-list">${feedbackList}</div>
+                                <div class="feedback-list">${fbList}</div>
                             </div>
                         </div>
                     `;
             });
-            catListEl.innerHTML = html;
+            el.innerHTML = html;
 
             document.querySelectorAll('.feedback-toggle').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1486,13 +1459,12 @@
                             <h3>📋 领养申请表 - ${cat.name}</h3>
                             <input type="text" placeholder="你的姓名" id="adoptName">
                             <input type="text" placeholder="联系电话" id="adoptPhone">
-                            <input type="text" placeholder="住址 (校区/宿舍)" id="adoptAddr">
+                            <input type="text" placeholder="住址" id="adoptAddr">
                             <textarea placeholder="领养理由..." rows="2" id="adoptReason"></textarea>
                             <div class="modal-actions">
                                 <button class="btn-submit" id="submitAdopt">提交申请</button>
                                 <button class="btn-cancel" id="closeAdopt">取消</button>
                             </div>
-                            <div style="margin-top:6px;font-size:12px;color:#6b5f4e;">📩 提交后管理员将收到领养信息</div>
                         </div>
                     </div>
                 `;
@@ -1504,9 +1476,6 @@
                 if (name && phone && addr && reason) {
                     alert(`✅ 领养申请已提交给管理员！ (${cat.name})`);
                     container.innerHTML = '';
-                    if (currentRole === 'admin') {
-                        alert('📋 管理员收到新的领养申请');
-                    }
                 } else {
                     alert('请完整填写领养单');
                 }
@@ -1529,8 +1498,8 @@
         }
 
         function renderVotes() {
-            const voteGrid = document.getElementById('voteGrid');
-            if (!voteGrid) return;
+            const grid = document.getElementById('voteGrid');
+            if (!grid) return;
 
             const today = new Date().toDateString();
             const userKey = currentUser || 'anonymous';
@@ -1553,7 +1522,7 @@
                         </div>
                     `;
             });
-            voteGrid.innerHTML = html;
+            grid.innerHTML = html;
 
             document.querySelectorAll('.vote-item .vote-btn:not([disabled])').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1568,7 +1537,6 @@
                         alert('你今天已经给这只猫投过票了！');
                         return;
                     }
-
                     for (let key in voteRecords[userKey]) {
                         if (voteRecords[userKey][key] === today) {
                             alert('你今天已经投过票了，每人每天只有一票！');
@@ -1585,15 +1553,15 @@
         }
 
         function renderUploads() {
-            const uploadSection = document.getElementById('uploadSection');
-            if (!uploadSection) return;
+            const section = document.getElementById('uploadSection');
+            if (!section) return;
 
             let html = '';
             cats.forEach(cat => {
                 const catUploads = uploads[cat.id] || [];
                 let galleryHtml = '';
                 if (catUploads.length === 0) {
-                    galleryHtml = `<div class="empty-gallery">暂无上传内容，快来分享吧！</div>`;
+                    galleryHtml = `<div class="empty-gallery">暂无上传内容</div>`;
                 } else {
                     catUploads.forEach((item, index) => {
                         const tag = item.type === 'image' ? '📷 照片' : '✏️ 手绘';
@@ -1607,11 +1575,10 @@
                     });
                 }
 
-                // 评论
                 const catComments = comments[cat.id] || [];
                 let commentHtml = '';
                 if (catComments.length === 0) {
-                    commentHtml = `<div class="comment-empty">还没有评论，来说点什么吧~</div>`;
+                    commentHtml = `<div class="comment-empty">还没有评论</div>`;
                 } else {
                     catComments.forEach(comment => {
                         const repliesHtml = (comment.replies || []).map(reply => `
@@ -1624,7 +1591,7 @@
                                 </div>
                             `).join('');
                         commentHtml += `
-                                <div class="comment-item" id="comment-${comment.id}">
+                                <div class="comment-item">
                                     <div class="comment-meta">
                                         <span class="comment-user">${comment.user}</span>
                                         <span class="comment-time">${comment.time}</span>
@@ -1648,24 +1615,20 @@
                                 <input type="file" id="upload-image-${cat.id}" accept="image/*" data-catid="${cat.id}" data-type="image">
                                 <label for="upload-drawing-${cat.id}">✏️ 上传手绘</label>
                                 <input type="file" id="upload-drawing-${cat.id}" accept="image/*" data-catid="${cat.id}" data-type="drawing">
-                                <span style="font-size:12px;color:#999;align-self:center;">支持 jpg/png</span>
+                                <span style="font-size:12px;color:#999;align-self:center;">jpg/png</span>
                             </div>
-                            <div class="gallery" id="gallery-${cat.id}">
-                                ${galleryHtml}
-                            </div>
+                            <div class="gallery">${galleryHtml}</div>
                             <div class="comment-section">
                                 <div class="comment-input-row">
                                     <textarea placeholder="说点什么..." id="comment-input-${cat.id}" rows="1"></textarea>
                                     <button class="send-btn" data-catid="${cat.id}">发送</button>
                                 </div>
-                                <div class="comment-list" id="comment-list-${cat.id}">
-                                    ${commentHtml}
-                                </div>
+                                <div class="comment-list">${commentHtml}</div>
                             </div>
                         </div>
                     `;
             });
-            uploadSection.innerHTML = html;
+            section.innerHTML = html;
 
             // 文件上传
             document.querySelectorAll('.upload-area input[type="file"]').forEach(input => {
@@ -1676,11 +1639,10 @@
                     const type = this.dataset.type;
                     const reader = new FileReader();
                     reader.onload = function(ev) {
-                        const base64 = ev.target.result;
                         if (!uploads[catId]) uploads[catId] = [];
                         uploads[catId].push({
                             type: type,
-                            data: base64,
+                            data: ev.target.result,
                             name: file.name,
                             user: currentUser || '匿名',
                             time: new Date().toLocaleString()
@@ -1698,7 +1660,7 @@
                 btn.addEventListener('click', function() {
                     const catId = parseInt(this.dataset.catid);
                     const index = parseInt(this.dataset.index);
-                    if (confirm('确定要删除这条内容吗？')) {
+                    if (confirm('确定删除？')) {
                         if (uploads[catId] && uploads[catId].length > index) {
                             uploads[catId].splice(index, 1);
                             saveData();
@@ -1729,8 +1691,6 @@
                     input.value = '';
                     saveData();
                     renderUploads();
-                    const list = document.getElementById(`comment-list-${catId}`);
-                    if (list) list.scrollTop = list.scrollHeight;
                 });
             });
 
@@ -1771,7 +1731,7 @@
         }
 
         // ================================================================
-        // 更新人气猫
+        // 人气猫
         // ================================================================
         function updatePopularCat() {
             const display = document.getElementById('popularCatDisplay');
@@ -1780,70 +1740,44 @@
             const userKey = currentUser || 'anonymous';
             const today = new Date().toDateString();
             const userVotes = voteRecords[userKey] || {};
-            let votedCount = 0;
+            let count = 0;
             for (let key in userVotes) {
-                if (userVotes[key] === today) votedCount++;
+                if (userVotes[key] === today) count++;
             }
-            display.textContent = `🏆 人气猫: ${top.name} (${top.votes}票) · 今日已投: ${votedCount}/1`;
+            display.textContent = `🏆 人气猫: ${top.name} (${top.votes}票) · 今日已投: ${count}/1`;
         }
 
         // ================================================================
-        // AI 助手
+        // AI
         // ================================================================
-        const aiResponse = document.getElementById('aiResponse');
-        const aiAskBtn = document.getElementById('aiAskBtn');
-        const aiQuestion = document.getElementById('aiQuestion');
-
-        async function callFreeAI(question) {
-            const url = 'https://api.chatanywhere.tech/v1/chat/completions';
-            const headers = { 'Content-Type': 'application/json' };
-            const body = {
-                model: 'gpt-3.5-turbo',
-                messages: [
-                    { role: 'system', content: '你是一个猫咪护理专家，回答关于猫咪的问题，语气温暖专业。' },
-                    { role: 'user', content: question }
-                ],
-                temperature: 0.7,
-                max_tokens: 600
-            };
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(body)
-            });
-            if (!response.ok) {
-                const errText = await response.text();
-                throw new Error(`API错误 (${response.status}): ${errText}`);
-            }
-            const data = await response.json();
-            return data.choices[0].message.content;
-        }
-
-        aiAskBtn.addEventListener('click', async function() {
-            const question = aiQuestion.value.trim();
-            if (!question) {
-                aiResponse.innerHTML = '❓ 请输入你想咨询的问题。';
-                return;
-            }
-            aiResponse.innerHTML = '⏳ 正在思考...';
+        document.getElementById('aiAskBtn').addEventListener('click', async function() {
+            const q = document.getElementById('aiQuestion').value.trim();
+            const el = document.getElementById('aiResponse');
+            if (!q) { el.innerHTML = '❓ 请输入问题'; return; }
+            el.innerHTML = '⏳ 思考中...';
             try {
-                const answer = await callFreeAI(question);
-                aiResponse.innerHTML = `🤖 ${answer}`;
-            } catch (error) {
-                console.error(error);
-                aiResponse.innerHTML = `❌ 请求失败: ${error.message}`;
+                const res = await fetch('https://api.chatanywhere.tech/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'gpt-3.5-turbo',
+                        messages: [
+                            { role: 'system', content: '你是猫咪专家。' },
+                            { role: 'user', content: q }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 600
+                    })
+                });
+                const data = await res.json();
+                el.innerHTML = `🤖 ${data.choices[0].message.content}`;
+            } catch (e) {
+                el.innerHTML = `❌ 请求失败: ${e.message}`;
             }
         });
 
-        aiQuestion.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                aiAskBtn.click();
-            }
-        });
-
-        console.log('✅ 平台加载完成');
-        console.log('👤 管理员账号: admin / 密码: admin123');
+        console.log('✅ 平台已加载');
+        console.log('👤 管理员: admin / admin123');
     </script>
 </body>
 </html>
