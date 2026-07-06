@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>校园流浪猫守护平台 · 免费AI</title>
     <style>
-        /* ----- 全局重置 ----- */
+        /* ----- 全局重置：完全铺满 ----- */
         * {
             margin: 0;
             padding: 0;
@@ -16,30 +16,31 @@
             width: 100%;
             height: 100%;
             background: #f2ede6;
+            overflow: hidden;
         }
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 12px;
         }
 
-        /* ----- 主容器：全屏自适应 ----- */
+        /* ----- 主容器：100%铺满 ----- */
         .app-container {
             width: 100%;
-            max-width: 1400px;
-            height: 95vh;
-            max-height: 1050px;
+            height: 100%;
+            max-width: 1600px;
+            max-height: 1200px;
             background: #ffffff;
-            border-radius: 48px;
+            border-radius: 36px;
             box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.15);
-            padding: 24px 32px 16px;
+            padding: 18px 24px 10px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* ===== 登录/注册面板 (全屏居中) ===== */
+        /* ===== 登录/注册面板 ===== */
         .auth-panel {
             display: flex;
             flex-direction: column;
@@ -128,12 +129,13 @@
         }
         .auth-extra span { color: #b48b6a; font-weight: 600; cursor: pointer; }
 
-        /* ===== 主应用布局 (登录后) ===== */
+        /* ===== 主应用 ===== */
         .main-app {
             display: none;
             flex-direction: column;
             flex: 1;
             height: 100%;
+            min-height: 0;
             animation: fadeUp 0.35s ease;
         }
         @keyframes fadeUp {
@@ -146,72 +148,78 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 6px 16px 6px;
+            padding: 0 4px 12px 4px;
             flex-shrink: 0;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
         .top-bar h1 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: #2d2a24;
         }
         .top-bar .role-tag {
             background: #e5dbd0;
-            padding: 8px 24px;
+            padding: 6px 22px;
             border-radius: 40px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             color: #4d4033;
         }
 
-        /* ----- 页面容器 (全屏) ----- */
+        /* ----- 页面容器：填满剩余空间 ----- */
         .page-container {
             flex: 1;
+            min-height: 0;
             overflow: hidden;
-            position: relative;
-            border-radius: 32px;
+            border-radius: 28px;
             background: #fcf9f5;
             border: 1px solid #f0ebe4;
+            position: relative;
         }
         .page {
             display: none;
             width: 100%;
             height: 100%;
-            padding: 24px 28px;
+            padding: 20px 24px;
             overflow-y: auto;
             animation: fadeUp 0.3s ease;
         }
         .page.active-page {
             display: block;
         }
-        .page::-webkit-scrollbar { width: 6px; }
+        .page::-webkit-scrollbar { width: 5px; }
         .page::-webkit-scrollbar-thumb { background: #d6c9bb; border-radius: 10px; }
 
-        /* ----- 首页 ----- */
+        /* ============================================================ */
+        /* 首页：两栏铺满 */
+        /* ============================================================ */
         .home-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
             height: 100%;
+            min-height: 0;
         }
         .home-left {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
+            min-height: 0;
         }
         .home-right {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
+            min-height: 0;
         }
         .carousel {
-            border-radius: 24px;
+            border-radius: 20px;
             overflow: hidden;
             background: #e7ddd2;
-            aspect-ratio: 16/9;
+            flex: 1;
+            min-height: 0;
             position: relative;
-            flex-shrink: 0;
         }
         .carousel img {
             width: 100%;
@@ -226,57 +234,69 @@
             right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.4));
             color: white;
-            padding: 24px 20px 14px;
-            font-size: 22px;
+            padding: 20px 18px 12px;
+            font-size: 20px;
             font-weight: 600;
             text-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         .intro-card {
             background: #f6f1ea;
-            border-radius: 20px;
-            padding: 16px 20px;
-            font-size: 15px;
+            border-radius: 18px;
+            padding: 14px 18px;
+            font-size: 14px;
             color: #3d352b;
-            line-height: 1.7;
-            flex: 1;
+            line-height: 1.6;
+            flex-shrink: 0;
         }
         .intro-card strong { color: #b48b6a; }
         .quick-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
+            flex-shrink: 0;
         }
         .quick-item {
             background: #f0e9e0;
             border-radius: 40px;
-            padding: 14px 8px;
+            padding: 12px 6px;
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             color: #4f4236;
         }
-        .quick-item span { display: block; font-size: 26px; margin-bottom: 4px; }
+        .quick-item span { display: block; font-size: 24px; margin-bottom: 2px; }
+        .home-tip {
+            font-size: 13px;
+            color: #7a6e5d;
+            padding: 8px 0;
+            text-align: center;
+            background: #f0ebe4;
+            border-radius: 40px;
+            flex-shrink: 0;
+        }
 
-        /* ----- 猫咪档案库 ----- */
+        /* ============================================================ */
+        /* 猫咪档案库：网格铺满 */
+        /* ============================================================ */
         .cat-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 18px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
             height: 100%;
             align-content: start;
         }
         .cat-card {
             background: #ffffff;
-            border-radius: 24px;
-            padding: 16px;
+            border-radius: 20px;
+            padding: 14px;
             border: 1px solid #ede6dc;
             transition: 0.1s;
         }
         .cat-card img {
             width: 100%;
-            height: 150px;
+            height: 140px;
             object-fit: cover;
-            border-radius: 18px;
+            border-radius: 16px;
             background: #ddd2c4;
         }
         .cat-info {
@@ -284,28 +304,28 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            margin: 10px 0 4px;
+            margin: 8px 0 2px;
         }
-        .cat-name { font-weight: 700; font-size: 18px; }
+        .cat-name { font-weight: 700; font-size: 17px; }
         .cat-tag {
             background: #e8ddd0;
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 30px;
-            font-size: 12px;
+            font-size: 11px;
         }
-        .cat-detail { font-size: 14px; color: #5e5142; margin: 2px 0 8px; }
+        .cat-detail { font-size: 13px; color: #5e5142; margin: 0 0 6px; }
         .cat-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
         .cat-actions button {
             background: #eae1d6;
             border: none;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 40px;
             font-weight: 500;
-            font-size: 13px;
+            font-size: 12px;
             color: #3d352b;
             cursor: pointer;
             transition: 0.1s;
@@ -317,164 +337,191 @@
         }
         .cat-actions .adopt-btn:hover { background: #a07a5c; }
         .feedback-area {
-            margin-top: 10px;
+            margin-top: 8px;
             background: #f2ece4;
-            padding: 10px 12px;
-            border-radius: 18px;
+            padding: 8px 10px;
+            border-radius: 16px;
         }
         .feedback-area textarea {
             width: 100%;
             border: none;
             background: transparent;
             resize: vertical;
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
-            min-height: 40px;
+            min-height: 32px;
         }
         .feedback-area button {
             background: #b48b6a;
             border: none;
-            padding: 4px 16px;
+            padding: 3px 14px;
             border-radius: 40px;
             color: white;
             font-weight: 500;
-            margin-top: 4px;
+            margin-top: 3px;
             cursor: pointer;
+            font-size: 12px;
         }
+        .feedback-list {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #5e5142;
+        }
+        .feedback-list div { padding: 2px 0; }
 
-        /* ----- 互动区 ----- */
+        /* ============================================================ */
+        /* 互动区：两栏铺满 */
+        /* ============================================================ */
         .interact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 18px;
             height: 100%;
             align-content: start;
         }
         .interact-item {
             background: #ffffff;
-            border-radius: 24px;
-            padding: 18px 20px;
+            border-radius: 20px;
+            padding: 16px 18px;
             border: 1px solid #ede6dc;
         }
-        .interact-item h3 { font-size: 18px; margin-bottom: 12px; color: #2d2a24; }
+        .interact-item h3 { font-size: 17px; margin-bottom: 10px; color: #2d2a24; }
         .vote-area {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         .vote-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #f0e9e0;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 40px;
         }
-        .vote-row strong { font-size: 15px; }
+        .vote-row strong { font-size: 14px; }
         .vote-btn {
             background: #b48b6a;
             border: none;
-            padding: 4px 18px;
+            padding: 3px 16px;
             border-radius: 40px;
             color: white;
             font-weight: 600;
             cursor: pointer;
+            font-size: 13px;
         }
         .comment-box textarea {
             width: 100%;
             border: 1px solid #ddd2c4;
-            border-radius: 24px;
-            padding: 12px;
+            border-radius: 20px;
+            padding: 10px 14px;
             background: white;
             resize: vertical;
-            font-size: 14px;
+            font-size: 13px;
         }
         .upload-area {
             display: flex;
-            gap: 10px;
-            margin: 10px 0;
+            gap: 8px;
+            margin: 8px 0;
             flex-wrap: wrap;
         }
         .upload-area button {
             background: #ddd2c4;
             border: none;
-            padding: 6px 18px;
+            padding: 5px 16px;
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
+            font-size: 13px;
         }
         .comment-item {
-            margin-top: 12px;
+            margin-top: 10px;
             background: #f0e9e0;
-            padding: 12px 16px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
         }
 
-        /* ----- 智能助手 (全屏) ----- */
+        /* ============================================================ */
+        /* 智能助手：铺满 */
+        /* ============================================================ */
         .ai-chat {
             height: 100%;
             display: flex;
             flex-direction: column;
-            padding: 4px 0;
+            padding: 2px 0;
+        }
+        .ai-chat .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .ai-chat h3 {
-            font-size: 22px;
+            font-size: 20px;
             color: #2d2a24;
-            margin-bottom: 12px;
-            flex-shrink: 0;
         }
         .ai-chat .api-badge {
-            font-size: 14px;
+            font-size: 13px;
             color: #6b5f4e;
             background: #ede6dc;
-            padding: 6px 16px;
+            padding: 4px 16px;
             border-radius: 40px;
-            display: inline-block;
-            margin-bottom: 14px;
-            flex-shrink: 0;
         }
         .ai-chat textarea {
             width: 100%;
-            border: none;
+            border: 1px solid #e2d9cd;
             background: white;
             border-radius: 40px;
-            padding: 16px 20px;
-            font-size: 16px;
+            padding: 14px 18px;
+            font-size: 15px;
             resize: none;
-            min-height: 70px;
+            min-height: 60px;
             flex-shrink: 0;
-            border: 1px solid #e2d9cd;
+            outline: none;
+        }
+        .ai-chat textarea:focus {
+            border-color: #c8ad8a;
+            box-shadow: 0 0 0 3px rgba(200, 173, 138, 0.12);
         }
         .ai-chat .btn-ai {
             background: #b48b6a;
             border: none;
-            padding: 12px 32px;
+            padding: 10px 30px;
             border-radius: 40px;
             color: white;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             align-self: flex-start;
             transition: 0.15s;
-            margin: 12px 0;
+            margin: 10px 0;
             flex-shrink: 0;
         }
         .ai-chat .btn-ai:hover { background: #a07a5c; }
         .ai-response {
             background: white;
-            padding: 20px 24px;
-            border-radius: 24px;
+            padding: 18px 22px;
+            border-radius: 20px;
             flex: 1;
-            min-height: 120px;
-            font-size: 15px;
+            min-height: 100px;
+            font-size: 14px;
             line-height: 1.7;
             white-space: pre-wrap;
             border: 1px solid #e2d9cd;
             overflow-y: auto;
         }
+        .ai-footer {
+            font-size: 12px;
+            color: #6b5f4e;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
 
-        /* ----- 领养单模态 (弹出) ----- */
+        /* ----- 领养单模态 ----- */
         .adopt-modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -487,29 +534,29 @@
         }
         .adopt-modal {
             background: white;
-            padding: 32px 36px;
-            border-radius: 40px;
-            max-width: 500px;
+            padding: 28px 32px;
+            border-radius: 36px;
+            max-width: 480px;
             width: 90%;
             box-shadow: 0 30px 60px rgba(0,0,0,0.3);
             max-height: 90vh;
             overflow-y: auto;
         }
-        .adopt-modal h3 { font-size: 22px; margin-bottom: 16px; }
+        .adopt-modal h3 { font-size: 20px; margin-bottom: 14px; }
         .adopt-modal input, .adopt-modal textarea {
             width: 100%;
-            padding: 14px 16px;
-            margin: 4px 0 14px;
+            padding: 12px 16px;
+            margin: 4px 0 12px;
             border: 1px solid #ddd2c4;
             border-radius: 40px;
             background: #fcf9f5;
-            font-size: 15px;
+            font-size: 14px;
         }
-        .adopt-modal textarea { min-height: 70px; resize: vertical; }
+        .adopt-modal textarea { min-height: 60px; resize: vertical; }
         .adopt-modal .modal-actions {
             display: flex;
             gap: 12px;
-            margin-top: 8px;
+            margin-top: 6px;
         }
         .adopt-modal .modal-actions button {
             padding: 10px 28px;
@@ -531,18 +578,18 @@
         .bottom-nav {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            padding: 14px 0 4px;
+            gap: 14px;
+            padding: 12px 0 2px;
             border-top: 1px solid #efe8df;
             flex-shrink: 0;
             flex-wrap: wrap;
         }
         .nav-item {
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             color: #9a8d7b;
             font-weight: 500;
-            padding: 8px 28px;
+            padding: 6px 24px;
             cursor: pointer;
             border-radius: 40px;
             background: transparent;
@@ -553,44 +600,46 @@
             background: #f3ede6;
             font-weight: 600;
         }
-        .nav-item span { display: block; font-size: 20px; margin-bottom: 2px; }
+        .nav-item span { display: block; font-size: 20px; margin-bottom: 1px; }
 
         /* ----- 联系栏 ----- */
         .contact-bar {
-            padding: 12px 0 2px;
-            font-size: 14px;
+            padding: 10px 0 2px;
+            font-size: 13px;
             color: #6b5f4e;
             text-align: center;
             border-top: 1px solid #e8dfd4;
             flex-shrink: 0;
-            margin-top: 4px;
+            margin-top: 2px;
         }
-        .contact-bar span { margin: 0 18px; }
+        .contact-bar span { margin: 0 16px; }
 
         /* ----- 工具类 ----- */
         .hidden { display: none !important; }
-        .mt-2 { margin-top: 12px; }
 
         /* ===== 响应式 ===== */
         @media (max-width: 1100px) {
             .cat-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 900px) {
-            .app-container { padding: 16px; height: 98vh; border-radius: 32px; }
+            .app-container { padding: 12px 16px 8px; border-radius: 28px; }
             .home-grid { grid-template-columns: 1fr; }
             .interact-grid { grid-template-columns: 1fr; }
             .cat-grid { grid-template-columns: 1fr 1fr; }
-            .page { padding: 16px; }
+            .page { padding: 14px 16px; }
         }
         @media (max-width: 600px) {
-            .app-container { padding: 10px; border-radius: 24px; height: 99vh; }
-            .top-bar h1 { font-size: 20px; }
+            .app-container { padding: 8px 10px 4px; border-radius: 20px; }
+            .top-bar h1 { font-size: 18px; }
+            .top-bar .role-tag { font-size: 12px; padding: 4px 14px; }
             .cat-grid { grid-template-columns: 1fr; }
             .quick-grid { grid-template-columns: 1fr 1fr; }
-            .nav-item { padding: 6px 16px; font-size: 12px; }
-            .nav-item span { font-size: 18px; }
-            .auth-panel .auth-box { padding: 24px 18px; }
-            .page { padding: 12px; }
+            .nav-item { padding: 4px 12px; font-size: 11px; }
+            .nav-item span { font-size: 16px; }
+            .page { padding: 10px 12px; }
+            .auth-panel .auth-box { padding: 20px 16px; }
+            .contact-bar span { margin: 0 8px; font-size: 11px; }
+            .carousel-caption { font-size: 16px; padding: 12px 14px 8px; }
         }
     </style>
 </head>
@@ -645,12 +694,12 @@
                         </div>
                         <div class="intro-card">
                             <strong>🐱 关于校园流浪猫</strong><br>
-                            校园里的小精灵，它们需要我们的温柔相待。请保持距离，不要惊吓；定时投喂，干净水源。<br>
-                            <span style="display:inline-block;margin-top:6px;">⚠️ 注意：不要随意触摸，避免应激。</span>
+                            校园里的小精灵，它们需要我们的温柔相待。请保持距离，不要惊吓；定时投喂，干净水源。
+                            <span style="display:block;margin-top:4px;">⚠️ 注意：不要随意触摸，避免应激。</span>
                         </div>
                     </div>
                     <div class="home-right">
-                        <div class="intro-card" style="flex:0;">
+                        <div class="intro-card" style="flex-shrink:0;">
                             <strong>📢 守护行动</strong><br>
                             每一只流浪猫都值得被关爱。加入我们，用行动守护它们。
                         </div>
@@ -659,9 +708,7 @@
                             <div class="quick-item"><span>❤️</span> 领养中心</div>
                             <div class="quick-item"><span>📋</span> 反馈建议</div>
                         </div>
-                        <div style="font-size:14px; color:#7a6e5d; padding:6px 0; background:#f0ebe4; border-radius:40px; text-align:center;">
-                            🐾 每3秒切换一张猫咪照片
-                        </div>
+                        <div class="home-tip">🐾 每3秒切换一张猫咪照片</div>
                     </div>
                 </div>
             </div>
@@ -686,14 +733,10 @@
                                 <button>📷 上传照片</button>
                                 <button>✏️ 上传手绘</button>
                             </div>
-                            <button style="background:#b48b6a;border:none;padding:8px 28px;border-radius:40px;color:white;font-weight:600;">发布</button>
+                            <button style="background:#b48b6a;border:none;padding:6px 24px;border-radius:40px;color:white;font-weight:600;cursor:pointer;">发布</button>
                         </div>
-                        <div class="comment-item">
-                            🐾 最新评论： “小橘太可爱了！”
-                        </div>
-                        <div class="comment-item">
-                            🐾 热门手绘： 用户上传了一张小黑的素描
-                        </div>
+                        <div class="comment-item">🐾 最新评论： “小橘太可爱了！”</div>
+                        <div class="comment-item">🐾 热门手绘： 用户上传了一张小黑的素描</div>
                     </div>
                 </div>
             </div>
@@ -701,12 +744,14 @@
             <!-- 智能助手 -->
             <div class="page" id="pageAI">
                 <div class="ai-chat">
-                    <h3>🤖 免费AI 猫咪助手</h3>
-                    <div class="api-badge">✅ 已内置免费API，无需Key</div>
+                    <div class="ai-header">
+                        <h3>🤖 免费AI 猫咪助手</h3>
+                        <span class="api-badge">✅ 内置免费API</span>
+                    </div>
                     <textarea placeholder="问关于猫咪的问题…" id="aiQuestion" rows="2">如何照顾幼猫？</textarea>
                     <button class="btn-ai" id="aiAskBtn">咨询 AI</button>
                     <div class="ai-response" id="aiResponse">💡 输入问题，点击咨询即可获得免费回答。</div>
-                    <div style="font-size:13px;color:#6b5f4e;margin-top:8px;">🔗 使用社区免费API (每日有限额)</div>
+                    <div class="ai-footer">🔗 使用社区免费API (每日有限额)</div>
                 </div>
             </div>
         </div>
@@ -847,12 +892,12 @@
                         <div class="cat-actions">
                             <button class="feedback-toggle" data-id="${cat.id}">💬 反馈</button>
                             <button class="adopt-btn" data-id="${cat.id}">🏠 领养</button>
-                            ${currentRole === 'admin' ? `<span style="font-size:12px;background:#d6c4b0;padding:0 12px;border-radius:40px;">📩 ${feedbacks[cat.id]?feedbacks[cat.id].length:0}条</span>` : ''}
+                            ${currentRole === 'admin' ? `<span style="font-size:11px;background:#d6c4b0;padding:0 10px;border-radius:40px;">📩 ${feedbacks[cat.id]?feedbacks[cat.id].length:0}条</span>` : ''}
                         </div>
                         <div class="feedback-area" id="feedback-${cat.id}" style="display:none;">
                             <textarea placeholder="添加关于 ${cat.name} 的反馈..." rows="2"></textarea>
                             <button class="submit-feedback" data-id="${cat.id}">提交反馈</button>
-                            <div style="margin-top:4px;font-size:13px;color:#5e5142;">${feedbackList}</div>
+                            <div class="feedback-list">${feedbackList}</div>
                         </div>
                     </div>
                 `;
@@ -909,7 +954,7 @@
                             <button class="btn-submit" id="submitAdopt">提交申请</button>
                             <button class="btn-cancel" id="closeAdopt">取消</button>
                         </div>
-                        <div style="margin-top:8px;font-size:13px;color:#6b5f4e;">📩 提交后管理员将收到领养信息</div>
+                        <div style="margin-top:6px;font-size:12px;color:#6b5f4e;">📩 提交后管理员将收到领养信息</div>
                     </div>
                 </div>
             `;
