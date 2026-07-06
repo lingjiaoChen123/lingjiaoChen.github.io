@@ -5,34 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>校园流浪猫守护平台 · 免费AI</title>
     <style>
-        /* ----- 全局重置 & 基础 ----- */
+        /* ----- 全局重置 ----- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
         }
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
             background: #f2ede6;
-            min-height: 100vh;
+        }
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        /* ----- 主容器：全屏自适应，最大宽屏舒适 ----- */
+        /* ----- 主容器：全屏自适应 ----- */
         .app-container {
             width: 100%;
             max-width: 1400px;
+            height: 95vh;
+            max-height: 1050px;
             background: #ffffff;
             border-radius: 48px;
             box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.15);
-            padding: 28px 32px 20px;
-            transition: all 0.2s;
+            padding: 24px 32px 16px;
             display: flex;
             flex-direction: column;
-            min-height: 90vh;
+            overflow: hidden;
         }
 
         /* ===== 登录/注册面板 (全屏居中) ===== */
@@ -41,9 +45,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
             flex: 1;
-            min-height: 70vh;
+            padding: 20px;
         }
         .auth-panel .auth-box {
             width: 100%;
@@ -57,7 +60,6 @@
             font-size: 32px;
             font-weight: 700;
             color: #2d2a24;
-            letter-spacing: -0.5px;
         }
         .auth-panel .auth-sub {
             color: #7a6e5d;
@@ -118,7 +120,6 @@
             transition: 0.15s;
         }
         .auth-form .btn-primary:hover { background: #a07a5c; }
-        .auth-form .btn-primary:active { transform: scale(0.97); }
         .auth-extra {
             display: flex;
             justify-content: space-between;
@@ -132,6 +133,7 @@
             display: none;
             flex-direction: column;
             flex: 1;
+            height: 100%;
             animation: fadeUp 0.35s ease;
         }
         @keyframes fadeUp {
@@ -144,10 +146,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 22px;
-            padding: 0 6px;
+            padding: 0 6px 16px 6px;
+            flex-shrink: 0;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
         .top-bar h1 {
             font-size: 28px;
@@ -163,54 +165,53 @@
             color: #4d4033;
         }
 
-        /* ----- 内容主体 (网格) ----- */
-        .main-grid {
+        /* ----- 页面容器 (全屏) ----- */
+        .page-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            border-radius: 32px;
+            background: #fcf9f5;
+            border: 1px solid #f0ebe4;
+        }
+        .page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 24px 28px;
+            overflow-y: auto;
+            animation: fadeUp 0.3s ease;
+        }
+        .page.active-page {
+            display: block;
+        }
+        .page::-webkit-scrollbar { width: 6px; }
+        .page::-webkit-scrollbar-thumb { background: #d6c9bb; border-radius: 10px; }
+
+        /* ----- 首页 ----- */
+        .home-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 28px;
-            flex: 1;
+            gap: 24px;
+            height: 100%;
         }
-        /* 左侧：首页 + 猫咪档案库 + 互动区 (滚动) */
-        .left-col {
+        .home-left {
             display: flex;
             flex-direction: column;
-            gap: 28px;
-            max-height: 70vh;
-            overflow-y: auto;
-            padding-right: 8px;
+            gap: 16px;
         }
-        .left-col::-webkit-scrollbar { width: 6px; }
-        .left-col::-webkit-scrollbar-thumb { background: #d6c9bb; border-radius: 10px; }
-
-        /* 右侧：智能助手 + 其他 (固定) */
-        .right-col {
+        .home-right {
             display: flex;
             flex-direction: column;
-            gap: 28px;
+            gap: 16px;
         }
-
-        /* ----- 页面容器 (在网格内) ----- */
-        .page {
-            display: block !important;  /* 覆盖默认隐藏，由JS控制显示 */
-            background: #fcf9f5;
-            border-radius: 32px;
-            padding: 22px 24px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
-            border: 1px solid #f0ebe4;
-            transition: 0.2s;
-        }
-        .page.hidden-page {
-            display: none !important;
-        }
-
-        /* ----- 首页 (左列) ----- */
         .carousel {
-            border-radius: 28px;
+            border-radius: 24px;
             overflow: hidden;
             background: #e7ddd2;
             aspect-ratio: 16/9;
             position: relative;
-            margin-bottom: 16px;
+            flex-shrink: 0;
         }
         .carousel img {
             width: 100%;
@@ -225,25 +226,25 @@
             right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.4));
             color: white;
-            padding: 30px 20px 14px;
-            font-size: 24px;
+            padding: 24px 20px 14px;
+            font-size: 22px;
             font-weight: 600;
             text-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         .intro-card {
             background: #f6f1ea;
-            border-radius: 24px;
-            padding: 18px 20px;
+            border-radius: 20px;
+            padding: 16px 20px;
             font-size: 15px;
             color: #3d352b;
             line-height: 1.7;
+            flex: 1;
         }
         .intro-card strong { color: #b48b6a; }
         .quick-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin: 16px 0 6px;
         }
         .quick-item {
             background: #f0e9e0;
@@ -253,28 +254,29 @@
             font-size: 15px;
             font-weight: 500;
             color: #4f4236;
-            cursor: default;
         }
         .quick-item span { display: block; font-size: 26px; margin-bottom: 4px; }
 
-        /* ----- 猫咪档案库 (左列) ----- */
-        #catList {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        /* ----- 猫咪档案库 ----- */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+            height: 100%;
+            align-content: start;
         }
         .cat-card {
             background: #ffffff;
             border-radius: 24px;
-            padding: 18px;
+            padding: 16px;
             border: 1px solid #ede6dc;
             transition: 0.1s;
         }
         .cat-card img {
             width: 100%;
-            height: 160px;
+            height: 150px;
             object-fit: cover;
-            border-radius: 20px;
+            border-radius: 18px;
             background: #ddd2c4;
         }
         .cat-info {
@@ -282,28 +284,28 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            margin: 12px 0 6px;
+            margin: 10px 0 4px;
         }
-        .cat-name { font-weight: 700; font-size: 20px; }
+        .cat-name { font-weight: 700; font-size: 18px; }
         .cat-tag {
             background: #e8ddd0;
-            padding: 4px 16px;
+            padding: 2px 14px;
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
         }
-        .cat-detail { font-size: 15px; color: #5e5142; margin: 4px 0 10px; }
+        .cat-detail { font-size: 14px; color: #5e5142; margin: 2px 0 8px; }
         .cat-actions {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
         }
         .cat-actions button {
             background: #eae1d6;
             border: none;
-            padding: 8px 22px;
+            padding: 6px 16px;
             border-radius: 40px;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             color: #3d352b;
             cursor: pointer;
             transition: 0.1s;
@@ -315,38 +317,44 @@
         }
         .cat-actions .adopt-btn:hover { background: #a07a5c; }
         .feedback-area {
-            margin-top: 14px;
+            margin-top: 10px;
             background: #f2ece4;
-            padding: 14px;
-            border-radius: 24px;
+            padding: 10px 12px;
+            border-radius: 18px;
         }
         .feedback-area textarea {
             width: 100%;
             border: none;
             background: transparent;
             resize: vertical;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
-            min-height: 50px;
+            min-height: 40px;
         }
         .feedback-area button {
             background: #b48b6a;
             border: none;
-            padding: 6px 20px;
+            padding: 4px 16px;
             border-radius: 40px;
             color: white;
             font-weight: 500;
-            margin-top: 6px;
+            margin-top: 4px;
             cursor: pointer;
         }
 
-        /* ----- 互动区 (左列) ----- */
+        /* ----- 互动区 ----- */
+        .interact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: 100%;
+            align-content: start;
+        }
         .interact-item {
             background: #ffffff;
             border-radius: 24px;
             padding: 18px 20px;
             border: 1px solid #ede6dc;
-            margin-bottom: 16px;
         }
         .interact-item h3 { font-size: 18px; margin-bottom: 12px; color: #2d2a24; }
         .vote-area {
@@ -362,11 +370,11 @@
             padding: 8px 16px;
             border-radius: 40px;
         }
-        .vote-row strong { font-size: 16px; }
+        .vote-row strong { font-size: 15px; }
         .vote-btn {
             background: #b48b6a;
             border: none;
-            padding: 4px 20px;
+            padding: 4px 18px;
             border-radius: 40px;
             color: white;
             font-weight: 600;
@@ -375,8 +383,8 @@
         .comment-box textarea {
             width: 100%;
             border: 1px solid #ddd2c4;
-            border-radius: 30px;
-            padding: 14px;
+            border-radius: 24px;
+            padding: 12px;
             background: white;
             resize: vertical;
             font-size: 14px;
@@ -384,52 +392,64 @@
         .upload-area {
             display: flex;
             gap: 10px;
-            margin: 12px 0;
+            margin: 10px 0;
             flex-wrap: wrap;
         }
         .upload-area button {
             background: #ddd2c4;
             border: none;
-            padding: 8px 20px;
+            padding: 6px 18px;
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
         }
+        .comment-item {
+            margin-top: 12px;
+            background: #f0e9e0;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
 
-        /* ----- 智能助手 (右侧) ----- */
+        /* ----- 智能助手 (全屏) ----- */
         .ai-chat {
-            background: #f6f1ea;
-            border-radius: 32px;
-            padding: 24px 22px;
             height: 100%;
             display: flex;
             flex-direction: column;
+            padding: 4px 0;
         }
-        .ai-chat h3 { font-size: 22px; margin-bottom: 12px; color: #2d2a24; }
+        .ai-chat h3 {
+            font-size: 22px;
+            color: #2d2a24;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+        .ai-chat .api-badge {
+            font-size: 14px;
+            color: #6b5f4e;
+            background: #ede6dc;
+            padding: 6px 16px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+        }
         .ai-chat textarea {
             width: 100%;
             border: none;
             background: white;
             border-radius: 40px;
-            padding: 16px 18px;
+            padding: 16px 20px;
             font-size: 16px;
-            resize: vertical;
-            min-height: 80px;
-        }
-        .ai-response {
-            background: white;
-            padding: 18px 20px;
-            border-radius: 24px;
-            margin: 14px 0;
-            min-height: 80px;
-            font-size: 15px;
-            line-height: 1.6;
-            white-space: pre-wrap;
+            resize: none;
+            min-height: 70px;
+            flex-shrink: 0;
+            border: 1px solid #e2d9cd;
         }
         .ai-chat .btn-ai {
             background: #b48b6a;
             border: none;
-            padding: 12px 28px;
+            padding: 12px 32px;
             border-radius: 40px;
             color: white;
             font-weight: 700;
@@ -437,46 +457,84 @@
             cursor: pointer;
             align-self: flex-start;
             transition: 0.15s;
+            margin: 12px 0;
+            flex-shrink: 0;
         }
         .ai-chat .btn-ai:hover { background: #a07a5c; }
-        .ai-chat .api-hint {
-            font-size: 13px;
-            color: #6b5f4e;
-            margin-top: 8px;
-            background: #ede6dc;
-            padding: 6px 16px;
-            border-radius: 40px;
-            display: inline-block;
+        .ai-response {
+            background: white;
+            padding: 20px 24px;
+            border-radius: 24px;
+            flex: 1;
+            min-height: 120px;
+            font-size: 15px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            border: 1px solid #e2d9cd;
+            overflow-y: auto;
         }
 
         /* ----- 领养单模态 (弹出) ----- */
+        .adopt-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
         .adopt-modal {
             background: white;
-            padding: 28px 30px;
+            padding: 32px 36px;
             border-radius: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-            margin: 12px 0;
-            border: 1px solid #ede6dc;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
         }
+        .adopt-modal h3 { font-size: 22px; margin-bottom: 16px; }
         .adopt-modal input, .adopt-modal textarea {
             width: 100%;
             padding: 14px 16px;
-            margin: 6px 0 14px;
+            margin: 4px 0 14px;
             border: 1px solid #ddd2c4;
             border-radius: 40px;
             background: #fcf9f5;
             font-size: 15px;
         }
         .adopt-modal textarea { min-height: 70px; resize: vertical; }
+        .adopt-modal .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .adopt-modal .modal-actions button {
+            padding: 10px 28px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .adopt-modal .btn-submit {
+            background: #b48b6a;
+            color: white;
+        }
+        .adopt-modal .btn-cancel {
+            background: #ddd2c4;
+            color: #3d352b;
+        }
 
-        /* ----- 底部导航 (电脑上改为标签栏) ----- */
+        /* ----- 底部导航 ----- */
         .bottom-nav {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 28px;
+            gap: 16px;
             padding: 14px 0 4px;
             border-top: 1px solid #efe8df;
+            flex-shrink: 0;
             flex-wrap: wrap;
         }
         .nav-item {
@@ -484,7 +542,7 @@
             font-size: 14px;
             color: #9a8d7b;
             font-weight: 500;
-            padding: 8px 24px;
+            padding: 8px 28px;
             cursor: pointer;
             border-radius: 40px;
             background: transparent;
@@ -495,45 +553,44 @@
             background: #f3ede6;
             font-weight: 600;
         }
-        .nav-item span { display: block; font-size: 22px; margin-bottom: 2px; }
+        .nav-item span { display: block; font-size: 20px; margin-bottom: 2px; }
 
         /* ----- 联系栏 ----- */
         .contact-bar {
-            margin-top: 20px;
-            padding: 16px 0 4px;
+            padding: 12px 0 2px;
             font-size: 14px;
             color: #6b5f4e;
             text-align: center;
             border-top: 1px solid #e8dfd4;
+            flex-shrink: 0;
+            margin-top: 4px;
         }
         .contact-bar span { margin: 0 18px; }
 
         /* ----- 工具类 ----- */
         .hidden { display: none !important; }
         .mt-2 { margin-top: 12px; }
-        .flex { display: flex; gap: 8px; flex-wrap: wrap; }
 
-        /* ===== 响应式：小屏/平板 改为单列 ===== */
-        @media (max-width: 900px) {
-            .app-container { padding: 18px 16px; }
-            .main-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .left-col {
-                max-height: none;
-                overflow-y: visible;
-                padding-right: 0;
-            }
-            .right-col { gap: 20px; }
-            .top-bar h1 { font-size: 22px; }
-            .auth-panel .auth-box { padding: 28px 20px; }
+        /* ===== 响应式 ===== */
+        @media (max-width: 1100px) {
+            .cat-grid { grid-template-columns: 1fr 1fr; }
         }
-        @media (max-width: 500px) {
-            .app-container { border-radius: 28px; padding: 12px; }
+        @media (max-width: 900px) {
+            .app-container { padding: 16px; height: 98vh; border-radius: 32px; }
+            .home-grid { grid-template-columns: 1fr; }
+            .interact-grid { grid-template-columns: 1fr; }
+            .cat-grid { grid-template-columns: 1fr 1fr; }
             .page { padding: 16px; }
-            .carousel-caption { font-size: 18px; }
+        }
+        @media (max-width: 600px) {
+            .app-container { padding: 10px; border-radius: 24px; height: 99vh; }
+            .top-bar h1 { font-size: 20px; }
+            .cat-grid { grid-template-columns: 1fr; }
             .quick-grid { grid-template-columns: 1fr 1fr; }
+            .nav-item { padding: 6px 16px; font-size: 12px; }
+            .nav-item span { font-size: 18px; }
+            .auth-panel .auth-box { padding: 24px 18px; }
+            .page { padding: 12px; }
         }
     </style>
 </head>
@@ -557,7 +614,6 @@
                     <span>忘记密码？</span>
                     <span id="switchToRegister">注册账号</span>
                 </div>
-                <!-- 提示已移除 -->
             </div>
             <div class="auth-form hidden" id="registerForm">
                 <input type="text" placeholder="昵称" id="regName">
@@ -577,78 +633,85 @@
             <span class="role-tag" id="roleTag">普通用户</span>
         </div>
 
-        <!-- 主网格 -->
-        <div class="main-grid">
-            <!-- 左列 -->
-            <div class="left-col">
-                <!-- 首页 -->
-                <div class="page" id="pageHome">
-                    <div class="carousel" id="carousel">
-                        <img id="carouselImg" src="https://placecats.com/600/350?random=1" alt="流浪猫">
-                        <div class="carousel-caption">一起守护毛孩子</div>
-                    </div>
-                    <div class="intro-card">
-                        <strong>🐱 关于校园流浪猫</strong><br>
-                        校园里的小精灵，它们需要我们的温柔相待。请保持距离，不要惊吓；定时投喂，干净水源。<br>
-                        <span style="display:inline-block;margin-top:8px;">⚠️ 注意：不要随意触摸，避免应激。</span>
-                    </div>
-                    <div class="quick-grid">
-                        <div class="quick-item"><span>📸</span> 猫咪相册</div>
-                        <div class="quick-item"><span>❤️</span> 领养中心</div>
-                        <div class="quick-item"><span>📋</span> 反馈建议</div>
-                    </div>
-                    <div style="font-size:14px; color:#7a6e5d; padding:8px 0;">🐾 每3秒切换一张猫咪照片</div>
-                </div>
-
-                <!-- 猫咪档案库 -->
-                <div class="page hidden-page" id="pageCats">
-                    <div id="catList"></div>
-                    <div id="adoptModalContainer"></div>
-                </div>
-
-                <!-- 创意互动区 -->
-                <div class="page hidden-page" id="pageInteract">
-                    <div id="interactContent">
-                        <div class="interact-item">
-                            <h3>🐈 人气猫投票</h3>
-                            <div class="vote-area" id="voteArea"></div>
+        <!-- 页面容器 -->
+        <div class="page-container">
+            <!-- 首页 -->
+            <div class="page active-page" id="pageHome">
+                <div class="home-grid">
+                    <div class="home-left">
+                        <div class="carousel" id="carousel">
+                            <img id="carouselImg" src="https://placecats.com/600/350?random=1" alt="流浪猫">
+                            <div class="carousel-caption">一起守护毛孩子</div>
                         </div>
-                        <div class="interact-item">
-                            <h3>💬 评论 & 手绘上传</h3>
-                            <div class="comment-box">
-                                <textarea placeholder="分享你与猫咪的故事…" rows="2"></textarea>
-                                <div class="upload-area">
-                                    <button>📷 上传照片</button>
-                                    <button>✏️ 上传手绘</button>
-                                </div>
-                                <button style="background:#b48b6a;border:none;padding:8px 28px;border-radius:40px;color:white;font-weight:600;">发布</button>
-                            </div>
-                            <div style="margin-top:14px;background:#f0e9e0;padding:14px;border-radius:24px;font-size:14px;">
-                                <span>🐾 最新评论： “小橘太可爱了！” </span>
-                            </div>
+                        <div class="intro-card">
+                            <strong>🐱 关于校园流浪猫</strong><br>
+                            校园里的小精灵，它们需要我们的温柔相待。请保持距离，不要惊吓；定时投喂，干净水源。<br>
+                            <span style="display:inline-block;margin-top:6px;">⚠️ 注意：不要随意触摸，避免应激。</span>
+                        </div>
+                    </div>
+                    <div class="home-right">
+                        <div class="intro-card" style="flex:0;">
+                            <strong>📢 守护行动</strong><br>
+                            每一只流浪猫都值得被关爱。加入我们，用行动守护它们。
+                        </div>
+                        <div class="quick-grid">
+                            <div class="quick-item"><span>📸</span> 猫咪相册</div>
+                            <div class="quick-item"><span>❤️</span> 领养中心</div>
+                            <div class="quick-item"><span>📋</span> 反馈建议</div>
+                        </div>
+                        <div style="font-size:14px; color:#7a6e5d; padding:6px 0; background:#f0ebe4; border-radius:40px; text-align:center;">
+                            🐾 每3秒切换一张猫咪照片
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 右列：智能助手 (固定) -->
-            <div class="right-col">
-                <div class="page" id="pageAI" style="height:100%;">
-                    <div class="ai-chat">
-                        <h3>🤖 免费AI 猫咪助手</h3>
-                        <div style="font-size:14px; color:#6b5f4e; background:#ede6dc; padding:6px 16px; border-radius:40px; display:inline-block; margin-bottom:12px;">
-                            ✅ 已内置免费API，无需Key
-                        </div>
-                        <textarea placeholder="问关于猫咪的问题…" id="aiQuestion" rows="2">如何照顾幼猫？</textarea>
-                        <button class="btn-ai" id="aiAskBtn">咨询 AI</button>
-                        <div class="ai-response" id="aiResponse">💡 输入问题，点击咨询即可获得免费回答。</div>
-                        <div style="font-size:13px;color:#6b5f4e;margin-top:6px;">🔗 使用社区免费API (每日有限额)</div>
+            <!-- 猫咪档案库 -->
+            <div class="page" id="pageCats">
+                <div class="cat-grid" id="catList"></div>
+            </div>
+
+            <!-- 创意互动区 -->
+            <div class="page" id="pageInteract">
+                <div class="interact-grid">
+                    <div class="interact-item">
+                        <h3>🐈 人气猫投票</h3>
+                        <div class="vote-area" id="voteArea"></div>
                     </div>
+                    <div class="interact-item">
+                        <h3>💬 评论 & 手绘上传</h3>
+                        <div class="comment-box">
+                            <textarea placeholder="分享你与猫咪的故事…" rows="2"></textarea>
+                            <div class="upload-area">
+                                <button>📷 上传照片</button>
+                                <button>✏️ 上传手绘</button>
+                            </div>
+                            <button style="background:#b48b6a;border:none;padding:8px 28px;border-radius:40px;color:white;font-weight:600;">发布</button>
+                        </div>
+                        <div class="comment-item">
+                            🐾 最新评论： “小橘太可爱了！”
+                        </div>
+                        <div class="comment-item">
+                            🐾 热门手绘： 用户上传了一张小黑的素描
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 智能助手 -->
+            <div class="page" id="pageAI">
+                <div class="ai-chat">
+                    <h3>🤖 免费AI 猫咪助手</h3>
+                    <div class="api-badge">✅ 已内置免费API，无需Key</div>
+                    <textarea placeholder="问关于猫咪的问题…" id="aiQuestion" rows="2">如何照顾幼猫？</textarea>
+                    <button class="btn-ai" id="aiAskBtn">咨询 AI</button>
+                    <div class="ai-response" id="aiResponse">💡 输入问题，点击咨询即可获得免费回答。</div>
+                    <div style="font-size:13px;color:#6b5f4e;margin-top:8px;">🔗 使用社区免费API (每日有限额)</div>
                 </div>
             </div>
         </div>
 
-        <!-- 底部导航 (全屏电脑标签切换) -->
+        <!-- 底部导航 -->
         <div class="bottom-nav">
             <div class="nav-item active" data-page="pageHome"><span>🏠</span>首页</div>
             <div class="nav-item" data-page="pageCats"><span>📚</span>档案库</div>
@@ -664,6 +727,9 @@
     </div>
 </div>
 
+<!-- ===== 领养单模态容器 ===== -->
+<div id="adoptModalContainer"></div>
+
 <script>
     (function(){
         // ---------- 猫咪数据 ----------
@@ -673,7 +739,6 @@
             { id: 3, name: '小黑', gender: '♂', neutered: '已绝育', personality: '胆小', hobby: '钻箱子', img: 'https://placecats.com/300/200?random=4', votes: 5 },
         ];
         let feedbacks = { 1: [], 2: [], 3: [] };
-        let adoptRequests = [];
         let currentRole = 'user';
         let isLoggedIn = false;
 
@@ -708,11 +773,10 @@
             document.querySelector('.auth-tab[data-tab="login"]').click();
         });
 
-        // 登录逻辑（管理员账号隐藏，但代码中保留）
+        // 登录
         document.getElementById('loginBtn').addEventListener('click', function() {
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-            // 管理员判断（不显示在界面上）
             if (user === 'admin' && pass === '123456') {
                 currentRole = 'admin';
                 isLoggedIn = true;
@@ -783,12 +847,12 @@
                         <div class="cat-actions">
                             <button class="feedback-toggle" data-id="${cat.id}">💬 反馈</button>
                             <button class="adopt-btn" data-id="${cat.id}">🏠 领养</button>
-                            ${currentRole === 'admin' ? `<span style="font-size:13px;background:#d6c4b0;padding:0 12px;border-radius:40px;">📩 反馈(${feedbacks[cat.id]?feedbacks[cat.id].length:0})</span>` : ''}
+                            ${currentRole === 'admin' ? `<span style="font-size:12px;background:#d6c4b0;padding:0 12px;border-radius:40px;">📩 ${feedbacks[cat.id]?feedbacks[cat.id].length:0}条</span>` : ''}
                         </div>
                         <div class="feedback-area" id="feedback-${cat.id}" style="display:none;">
                             <textarea placeholder="添加关于 ${cat.name} 的反馈..." rows="2"></textarea>
                             <button class="submit-feedback" data-id="${cat.id}">提交反馈</button>
-                            <div style="margin-top:6px;font-size:13px;color:#5e5142;">${feedbackList}</div>
+                            <div style="margin-top:4px;font-size:13px;color:#5e5142;">${feedbackList}</div>
                         </div>
                     </div>
                 `;
@@ -834,17 +898,19 @@
         // 领养单
         function showAdoptModal(cat) {
             adoptModalContainer.innerHTML = `
-                <div class="adopt-modal">
-                    <h3>📋 领养申请表 - ${cat.name}</h3>
-                    <input type="text" placeholder="你的姓名" id="adoptName">
-                    <input type="text" placeholder="联系电话" id="adoptPhone">
-                    <input type="text" placeholder="住址 (校区/宿舍)" id="adoptAddr">
-                    <textarea placeholder="领养理由..." rows="2" id="adoptReason"></textarea>
-                    <div style="display:flex; gap:12px; margin-top:8px;">
-                        <button id="submitAdopt" style="background:#b48b6a;border:none;padding:8px 28px;border-radius:40px;color:white;">提交申请</button>
-                        <button id="closeAdopt" style="background:#ddd2c4;border:none;padding:8px 28px;border-radius:40px;">取消</button>
+                <div class="adopt-modal-overlay" id="adoptOverlay">
+                    <div class="adopt-modal">
+                        <h3>📋 领养申请表 - ${cat.name}</h3>
+                        <input type="text" placeholder="你的姓名" id="adoptName">
+                        <input type="text" placeholder="联系电话" id="adoptPhone">
+                        <input type="text" placeholder="住址 (校区/宿舍)" id="adoptAddr">
+                        <textarea placeholder="领养理由..." rows="2" id="adoptReason"></textarea>
+                        <div class="modal-actions">
+                            <button class="btn-submit" id="submitAdopt">提交申请</button>
+                            <button class="btn-cancel" id="closeAdopt">取消</button>
+                        </div>
+                        <div style="margin-top:8px;font-size:13px;color:#6b5f4e;">📩 提交后管理员将收到领养信息</div>
                     </div>
-                    <div style="margin-top:8px;font-size:13px;color:#6b5f4e;">📩 提交后管理员将收到领养信息</div>
                 </div>
             `;
             document.getElementById('submitAdopt').addEventListener('click', function() {
@@ -853,7 +919,6 @@
                 const addr = document.getElementById('adoptAddr').value.trim();
                 const reason = document.getElementById('adoptReason').value.trim();
                 if (name && phone && addr && reason) {
-                    adoptRequests.push({ cat: cat.name, name, phone, addr, reason });
                     alert(`✅ 领养申请已提交给管理员！ (${cat.name})`);
                     adoptModalContainer.innerHTML = '';
                     if (currentRole === 'admin') {
@@ -865,6 +930,9 @@
             });
             document.getElementById('closeAdopt').addEventListener('click', function() {
                 adoptModalContainer.innerHTML = '';
+            });
+            document.getElementById('adoptOverlay').addEventListener('click', function(e) {
+                if (e.target === this) adoptModalContainer.innerHTML = '';
             });
         }
 
@@ -889,28 +957,28 @@
                     if (cat) {
                         cat.votes += 1;
                         renderVotes();
-                        const top = cats.reduce((a,b) => a.votes > b.votes ? a : b);
-                        document.querySelector('#interactContent h3').innerHTML = `🐈 人气猫: ${top.name} (${top.votes}票)`;
+                        updatePopularCat();
                     }
                 });
             });
+            updatePopularCat();
+        }
+        function updatePopularCat() {
             if (cats.length) {
                 const top = cats.reduce((a,b) => a.votes > b.votes ? a : b);
-                document.querySelector('#interactContent h3').innerHTML = `🐈 人气猫: ${top.name} (${top.votes}票)`;
+                const h3 = document.querySelector('#pageInteract .interact-item h3');
+                if (h3) h3.innerHTML = `🐈 人气猫: ${top.name} (${top.votes}票)`;
             }
         }
 
-        // ---------- 免费AI (无需Key) ----------
+        // ---------- 免费AI ----------
         const aiResponse = document.getElementById('aiResponse');
         const aiAskBtn = document.getElementById('aiAskBtn');
         const aiQuestion = document.getElementById('aiQuestion');
 
         async function callFreeAI(question) {
-            // 使用免费代理API (无需Key)
             const url = 'https://api.chatanywhere.tech/v1/chat/completions';
-            const headers = {
-                'Content-Type': 'application/json'
-            };
+            const headers = { 'Content-Type': 'application/json' };
             const body = {
                 model: 'gpt-3.5-turbo',
                 messages: [
@@ -955,16 +1023,15 @@
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 this.classList.add('active');
                 const pageId = this.dataset.page;
-                document.querySelectorAll('.page').forEach(p => p.classList.add('hidden-page'));
-                document.getElementById(pageId).classList.remove('hidden-page');
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+                document.getElementById(pageId).classList.add('active-page');
             });
         });
 
-        // 默认显示首页
+        // 初始化
         window.addEventListener('load', function() {
-            // 确保首页显示
-            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden-page'));
-            document.getElementById('pageHome').classList.remove('hidden-page');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById('pageHome').classList.add('active-page');
         });
     })();
 </script>
