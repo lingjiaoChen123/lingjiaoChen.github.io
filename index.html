@@ -3,22 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>校园流浪猫守护站 - 首页</title>
+    <title>校园流浪猫守护站</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑;}
         body{background:#f7f8fa;color:#333;}
-        /* 导航 */
+        /* 顶部导航 */
         .nav{background:#222;color:#fff;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:99;}
-        .nav a{color:#fff;text-decoration:none;margin:0 15px;}
-        .nav a:hover,.nav a.active{color:#ffb700;}
-        /* 轮播 */
-        .banner{width:100%;height:450px;background:url(https://picsum.photos/1920/800) center/cover;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;}
-        .banner h1{font-size:42px;text-shadow:2px 2px 6px #000;}
-        .banner p{font-size:20px;margin-top:10px;}
-        /* 容器 */
+        .nav a{color:#fff;text-decoration:none;margin:0 15px;font-size:16px;}
+        .nav a.active,.nav a:hover{color:#ffc107;}
+
+        /* 图片轮播容器 */
+        .swiper{width:100%;height:460px;overflow:hidden;position:relative;}
+        .img-box{width:300%;height:100%;display:flex;transition:0.6s ease;}
+        .img-box img{width:100%;height:100%;object-fit:cover;}
+        /* 轮播文字 */
+        .swiper-text{position:absolute;left:0;bottom:80px;width:100%;text-align:center;color:#fff;}
+        .swiper-text h1{font-size:40px;text-shadow:2px 2px 6px #000;}
+        .swiper-text p{font-size:20px;margin-top:10px;}
+        /* 小圆点 */
+        .dot{position:absolute;bottom:30px;width:100%;text-align:center;}
+        .dot span{display:inline-block;width:12px;height:12px;border-radius:50%;background:#ccc;margin:0 6px;cursor:pointer;}
+        .dot span.active{background:#ffc107;}
+
         .container{max-width:1200px;margin:40px auto;padding:0 20px;}
         .title{text-align:center;font-size:30px;margin:50px 0 30px;color:#222;}
-        /* 猫咪卡片 */
+
+        /* 猫咪投票卡片 */
         .cat-box{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:25px;}
         .cat-card{background:#fff;border-radius:12px;box-shadow:0 3px 15px #eee;overflow:hidden;}
         .cat-card img{width:100%;height:200px;object-fit:cover;}
@@ -27,22 +37,25 @@
         .vote-num{color:#e63946;margin:8px 0;}
         .vote-btn{background:#ff6b6b;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;}
         .vote-btn:hover{background:#ee5253;}
-        /* 排名榜 */
+
+        /* 排名 */
         .rank-box{background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 10px #eee;margin:40px 0;}
         .rank-item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee;}
+
         /* 上传图片 */
         .upload-area{background:#fff;padding:30px;border-radius:12px;text-align:center;margin:40px 0;}
         #file-input{display:none;}
         .upload-btn{background:#409eff;color:#fff;padding:10px 25px;border-radius:6px;cursor:pointer;display:inline-block;}
         .preview-img{max-width:300px;margin-top:20px;border-radius:8px;}
-        /* 智能体问答 */
+
+        /* 智能问答 */
         .ai-box{background:#fff;padding:30px;border-radius:12px;margin:40px 0;}
         .chat-box{height:300px;border:1px solid #ddd;padding:15px;overflow-y:auto;margin-bottom:15px;}
         .user-msg{text-align:right;margin:8px 0;}
         .ai-msg{text-align:left;margin:8px 0;color:#2c3e50;}
         .chat-input{width:80%;padding:10px;border:1px solid #ccc;border-radius:6px;}
         .send-btn{padding:10px 20px;background:#27ae60;color:#fff;border:none;border-radius:6px;cursor:pointer;}
-        /* 底部 */
+
         footer{text-align:center;padding:30px;background:#222;color:#fff;margin-top:60px;}
     </style>
 </head>
@@ -57,86 +70,108 @@
         </div>
     </div>
 
-    <!-- 轮播 -->
-    <div class="banner" id="home">
-        <div>
-            <h1 id="bannerTitle">关爱校园流浪猫</h1>
-            <p id="bannerSub">用心呵护小猫咪，一起守护毛孩子</p>
+    <!-- 顶部图片自动轮播 -->
+    <div class="swiper">
+        <div class="img-box" id="imgBox">
+            <img src="https://picsum.photos/id/40/1920/800" alt="">
+            <img src="https://picsum.photos/id/1074/1920/800" alt="">
+            <img src="https://picsum.photos/id/169/1920/800" alt="">
+        </div>
+        <!-- 轮播文字 -->
+        <div class="swiper-text">
+            <h1 id="mainTitle">关爱校园流浪猫</h1>
+            <p id="subTitle">用心呵护小猫咪</p>
+        </div>
+        <!-- 圆点指示器 -->
+        <div class="dot">
+            <span class="active" onclick="changeIndex(0)"></span>
+            <span onclick="changeIndex(1)"></span>
+            <span onclick="changeIndex(2)"></span>
         </div>
     </div>
 
     <div class="container">
-        <!-- 猫咪投票区域 -->
-        <h2 class="title" id="catList">可爱猫咪投票专区</h2>
-        <div class="cat-box" id="catContainer">
-            <!-- JS动态生成猫咪卡片 -->
-        </div>
+        <!-- 猫咪投票 -->
+        <h2 class="title">可爱猫咪投票专区</h2>
+        <div class="cat-box" id="catContainer"></div>
 
         <!-- 喜爱度排名 -->
-        <h2 class="title" id="rank">猫咪喜爱度实时排名</h2>
+        <h2 class="title">猫咪喜爱度实时排名</h2>
         <div class="rank-box" id="rankBox"></div>
 
         <!-- 图片上传 -->
-        <h2 class="title" id="upload">上传校园猫咪实拍</h2>
+        <h2 class="title">上传校园猫咪实拍</h2>
         <div class="upload-area">
-            <label class="upload-btn" for="file-input">点击选择图片上传</label>
+            <label class="upload-btn" for="file-input">选择图片上传</label>
             <input type="file" id="file-input" accept="image/*">
-            <div>
-                <img class="preview-img" id="imgPreview" style="display:none;">
-            </div>
-            <p style="margin-top:15px;color:#666;">上传你拍到的校园流浪猫照片分享大家</p>
+            <div><img class="preview-img" id="imgPreview" style="display:none;"></div>
+            <p style="margin-top:15px;color:#666;">分享你拍到的校园猫咪</p>
         </div>
 
-        <!-- AI智能体互动问答 -->
-        <h2 class="title" id="ai">猫咪智能互动问答</h2>
+        <!-- 智能问答 -->
+        <h2 class="title">猫咪智能互动问答</h2>
         <div class="ai-box">
             <div class="chat-box" id="chatBox">
-                <div class="ai-msg">AI守护助手：你好！我可以解答猫咪喂养、救助、习性相关问题，直接提问吧~</div>
+                <div class="ai-msg">AI守护助手：你好，有任何猫咪相关问题都可以问我！</div>
             </div>
-            <input class="chat-input" id="chatInput" placeholder="输入你的问题，例如：流浪猫怎么喂养">
-            <button class="send-btn" onclick="sendChat()">发送提问</button>
+            <input class="chat-input" id="chatInput" placeholder="输入问题：怎么喂流浪猫">
+            <button class="send-btn" onclick="sendChat()">发送</button>
         </div>
     </div>
 
-    <footer>
-        校园流浪猫守护平台 · 集投票排名、图片分享、智能问答一体
-    </footer>
+    <footer>校园流浪猫守护平台 · 爱心守护生灵</footer>
 
 <script>
-    // 1.三张轮播标题
-    const bannerText = [
+    // ========== 顶部图片轮播+文字切换 ==========
+    const imgBox = document.getElementById("imgBox");
+    const dots = document.querySelectorAll(".dot span");
+    const titleList = [
         {t:"关爱校园流浪猫",s:"用心呵护小猫咪"},
-        {t:"守护身边小生命",s:"善待每一只流浪猫咪"},
-        {t:"同心守护毛孩子",s:"以小爱温暖校园生灵"}
+        {t:"守护身边小生命",s:"善待每一只流浪猫"},
+        {t:"同心守护毛孩子",s:"小爱温暖校园"}
     ];
-    let banIndex=0;
-    function changeBanner(){
-        banIndex++;
-        if(banIndex>=bannerText.length)banIndex=0;
-        document.getElementById("bannerTitle").innerText=bannerText[banIndex].t;
-        document.getElementById("bannerSub").innerText=bannerText[banIndex].s;
-    }
-    setInterval(changeBanner,4000);
+    let index = 0;
+    let timer;
 
-    // 2.猫咪数据 + 投票喜爱度
+    function autoPlay(){
+        index++;
+        if(index >= 3) index = 0;
+        moveSwiper();
+    }
+    function moveSwiper(){
+        imgBox.style.transform = `translateX(-${index*100}%)`;
+        //切换圆点
+        dots.forEach((item,i)=>{
+            item.classList.toggle("active",i===index);
+        })
+        //切换文字
+        document.getElementById("mainTitle").innerText = titleList[index].t;
+        document.getElementById("subTitle").innerText = titleList[index].s;
+    }
+    function changeIndex(i){
+        index = i;
+        moveSwiper();
+    }
+    //自动轮播
+    timer = setInterval(autoPlay,4000);
+
+    // ========== 猫咪投票排名 ==========
     let catData = [
         {id:1,name:"大橘",desc:"性格温顺，爱晒太阳",vote:128},
         {id:2,name:"狸花猫",desc:"机灵警惕，身手灵活",vote:96},
         {id:3,name:"三花",desc:"胆小温柔，十分亲人",vote:156},
         {id:4,name:"小黑",desc:"高冷帅气，夜间出没",vote:88}
     ];
-
-    // 渲染猫咪卡片
     function renderCat(){
         let html="";
         catData.forEach(item=>{
             html+=`
             <div class="cat-card">
-                <img src="https://picsum.photos/300/200?random=${item.id}" alt="${item.name}">
+                <img src="https://picsum.photos/300/200?random=${item.id}">
                 <div class="cat-info">
                     <h3>${item.name}</h3>
                     <p>${item.desc}</p>
-                    <p class="vote-num">当前喜爱票数：${item.vote}</p>
+                    <p class="vote-num">喜爱票数：${item.vote}</p>
                     <button class="vote-btn" onclick="addVote(${item.id})">投我一票</button>
                 </div>
             </div>
@@ -145,76 +180,60 @@
         document.getElementById("catContainer").innerHTML=html;
         renderRank();
     }
-
-    // 投票
     function addVote(id){
-        let cat=catData.find(v=>v.id===id);
+        let cat = catData.find(v=>v.id===id);
         if(cat){
             cat.vote++;
             renderCat();
-            alert("投票成功！你为"+cat.name+"增加喜爱值啦");
+            alert("投票成功！");
         }
     }
-
-    // 喜爱度排名
     function renderRank(){
-        let sortArr=[...catData].sort((a,b)=>b.vote-a.vote);
+        let sortArr = [...catData].sort((a,b)=>b.vote-a.vote);
         let html="";
         sortArr.forEach((item,idx)=>{
-            html+=`
-            <div class="rank-item">
-                <span>第${idx+1}名：${item.name}</span>
-                <span>喜爱票数：${item.vote}</span>
-            </div>
-            `
+            html+=`<div class="rank-item"><span>第${idx+1}名 ${item.name}</span><span>票数：${item.vote}</span></div>`
         })
         document.getElementById("rankBox").innerHTML=html;
     }
 
-    // 3.图片上传预览
+    // ========== 图片上传预览 ==========
     document.getElementById("file-input").addEventListener("change",function(e){
-        let file=e.target.files[0];
+        let file = e.target.files[0];
         if(!file)return;
-        let reader=new FileReader();
+        let reader = new FileReader();
         reader.onload=function(res){
-            let img=document.getElementById("imgPreview");
-            img.src=res.target.result;
+            let img = document.getElementById("imgPreview");
+            img.src = res.target.result;
             img.style.display="block";
         }
         reader.readAsDataURL(file);
     })
 
-    // 4.简易智能体问答（内置知识库）
-    const aiAnswer={
-        "怎么喂流浪猫":"尽量投喂猫粮、清水，不要喂辣条、骨头、高盐饭菜，定点投喂更卫生。",
-        "流浪猫生病了怎么办":"优先隔离观察，联系校园救助社团，严重及时送往宠物医院救治。",
-        "猫咪喜欢吃什么":"猫咪偏爱鱼肉、鸡肉、专用猫粮，少食多餐最合适。",
-        "可以摸流浪猫吗":"不熟尽量不要伸手，容易被抓伤，慢慢熟悉再轻柔抚摸头部。",
-        "冬天怎么保护流浪猫":"可以搭建简易避风窝，放置保暖旧衣物，保证食物水源不结冰。"
-    }
+    // ========== 智能问答 ==========
+    const aiKnow = {
+        "喂食":"喂猫粮和清水，别喂重油重盐饭菜",
+        "生病":"及时隔离，联系救助人员送医",
+        "抚摸":"不熟不要伸手，容易被抓伤",
+        "过冬":"搭建避风窝，放置保暖衣物"
+    };
     function sendChat(){
-        let input=document.getElementById("chatInput");
-        let text=input.value.trim();
-        if(!text)return;
-        let chatBox=document.getElementById("chatBox");
-        chatBox.innerHTML+=`<div class="user-msg">我：${text}</div>`;
-        let res="暂时没有相关解答，你可以询问喂养、救助、过冬、抚摸相关问题哦";
-        for(let key in aiAnswer){
-            if(text.includes(key)){
-                res=aiAnswer[key];break;
-            }
+        let val = document.getElementById("chatInput").value.trim();
+        if(!val)return;
+        let box = document.getElementById("chatBox");
+        box.innerHTML += `<div class="user-msg">我：${val}</div>`;
+        let ans = "暂时没有相关解答哦";
+        for(let k in aiKnow){
+            if(val.includes(k)){ans=aiKnow[k];break;}
         }
         setTimeout(()=>{
-            chatBox.innerHTML+=`<div class="ai-msg">AI守护助手：${res}</div>`;
-            chatBox.scrollTop=chatBox.scrollHeight;
-        },500)
-        input.value="";
+            box.innerHTML += `<div class="ai-msg">AI助手：${ans}</div>`;
+            box.scrollTop = box.scrollHeight;
+        },400)
+        document.getElementById("chatInput").value="";
     }
 
-    // 初始化
-    window.onload=function(){
-        renderCat();
-    }
+    window.onload=renderCat;
 </script>
 </body>
 </html>
