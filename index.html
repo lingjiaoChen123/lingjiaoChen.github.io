@@ -18,8 +18,8 @@
                     <div class="auth-tab" data-tab="register">注册</div>
                 </div>
                 <div class="auth-form" id="loginForm">
-                    <input type="text" placeholder="账号" id="loginUser" value="admin">
-                    <input type="password" placeholder="密码" id="loginPass" value="123456">
+                    <input type="text" placeholder="账号" id="loginUser" value="">
+                    <input type="password" placeholder="密码" id="loginPass" value="">
                     <button class="btn-primary" id="loginBtn">登录</button>
                     <div class="auth-extra">
                         <span>忘记密码？</span>
@@ -41,7 +41,10 @@
             <!-- 顶栏 -->
             <div class="top-bar">
                 <h1>🐈 守护平台</h1>
-                <span class="role-tag" id="roleTag">普通用户</span>
+                <div class="right-group">
+                    <span class="role-tag" id="roleTag">普通用户</span>
+                    <button class="logout-btn" id="logoutBtn">🚪 退出</button>
+                </div>
             </div>
 
             <!-- 页面容器 -->
