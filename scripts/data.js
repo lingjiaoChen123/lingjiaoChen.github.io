@@ -66,3 +66,16 @@ function saveData() {
 function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
 }
+
+// 暴露全局
+window.cats = cats;
+window.feedbacks = feedbacks;
+window.uploads = uploads;
+window.voteRecords = voteRecords;
+window.comments = comments;
+window.currentUser = currentUser;
+window.currentRole = currentRole;
+window.isLoggedIn = isLoggedIn;
+window.loadData = loadData;
+window.saveData = saveData;
+window.generateId = generateId;
