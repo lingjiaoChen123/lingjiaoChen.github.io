@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>校园流浪猫守护平台 · 免费AI</title>
+    <title>校园流浪猫守护平台</title>
     <style>
-        /* ----- 全局重置：完全铺满 ----- */
         * {
             margin: 0;
             padding: 0;
@@ -15,26 +14,25 @@
         html, body {
             width: 100%;
             height: 100%;
-            background: #f2ede6;
+            background: #f0ebe4;
             overflow: hidden;
         }
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
         }
 
-        /* ----- 主容器：100%铺满 ----- */
+        /* ===== 主容器：完全铺满 ===== */
         .app-container {
             width: 100%;
             height: 100%;
             max-width: 1600px;
-            max-height: 1200px;
+            max-height: 1100px;
             background: #ffffff;
-            border-radius: 36px;
-            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.15);
-            padding: 18px 24px 10px;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -47,34 +45,32 @@
             justify-content: center;
             align-items: center;
             flex: 1;
-            padding: 20px;
+            background: #fcf9f5;
         }
         .auth-panel .auth-box {
             width: 100%;
-            max-width: 460px;
-            background: #fcf9f5;
+            max-width: 440px;
+            background: white;
             padding: 40px 36px;
-            border-radius: 48px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
         }
         .auth-panel h2 {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 700;
             color: #2d2a24;
         }
         .auth-panel .auth-sub {
             color: #7a6e5d;
-            font-size: 16px;
-            margin: 6px 0 28px;
+            font-size: 15px;
+            margin: 4px 0 24px;
             border-left: 4px solid #e8b88a;
             padding-left: 14px;
         }
         .auth-tabs {
             display: flex;
-            gap: 12px;
-            margin-bottom: 28px;
-            border-bottom: 1px solid #ede8df;
-            padding-bottom: 10px;
+            gap: 10px;
+            margin-bottom: 24px;
         }
         .auth-tab {
             flex: 1;
@@ -86,7 +82,7 @@
             background: #f3efe8;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 16px;
+            font-size: 15px;
         }
         .auth-tab.active {
             background: #d9c9b4;
@@ -94,29 +90,28 @@
         }
         .auth-form input {
             width: 100%;
-            padding: 16px 18px;
-            margin-bottom: 16px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
             border: 1px solid #e2d9cd;
             border-radius: 40px;
-            background: #ffffff;
-            font-size: 16px;
+            background: #fcf9f5;
+            font-size: 15px;
             outline: none;
-            transition: 0.15s;
         }
         .auth-form input:focus {
             border-color: #c8ad8a;
-            box-shadow: 0 0 0 3px rgba(200, 173, 138, 0.15);
+            box-shadow: 0 0 0 3px rgba(200, 173, 138, 0.12);
         }
         .auth-form .btn-primary {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             background: #b48b6a;
             border: none;
             border-radius: 40px;
             color: white;
             font-weight: 700;
-            font-size: 18px;
-            margin: 8px 0 14px;
+            font-size: 17px;
+            margin: 6px 0 12px;
             cursor: pointer;
             transition: 0.15s;
         }
@@ -124,79 +119,70 @@
         .auth-extra {
             display: flex;
             justify-content: space-between;
-            font-size: 15px;
+            font-size: 14px;
             color: #7a6e5d;
         }
         .auth-extra span { color: #b48b6a; font-weight: 600; cursor: pointer; }
+        .hidden { display: none !important; }
 
         /* ===== 主应用 ===== */
         .main-app {
             display: none;
             flex-direction: column;
-            flex: 1;
             height: 100%;
-            min-height: 0;
-            animation: fadeUp 0.35s ease;
-        }
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(12px); }
-            100% { opacity: 1; transform: translateY(0); }
+            width: 100%;
         }
 
-        /* ----- 顶栏 ----- */
+        /* ===== 顶栏 ===== */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 4px 12px 4px;
+            padding: 14px 28px 10px 28px;
             flex-shrink: 0;
-            flex-wrap: wrap;
-            gap: 8px;
+            border-bottom: 1px solid #f0ebe4;
         }
         .top-bar h1 {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 700;
             color: #2d2a24;
         }
         .top-bar .role-tag {
             background: #e5dbd0;
-            padding: 6px 22px;
+            padding: 6px 20px;
             border-radius: 40px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #4d4033;
         }
 
-        /* ----- 页面容器：填满剩余空间 ----- */
+        /* ===== 页面容器：填满剩余 ===== */
         .page-container {
             flex: 1;
             min-height: 0;
             overflow: hidden;
-            border-radius: 28px;
-            background: #fcf9f5;
-            border: 1px solid #f0ebe4;
             position: relative;
         }
         .page {
             display: none;
             width: 100%;
             height: 100%;
-            padding: 20px 24px;
+            padding: 20px 28px;
             overflow-y: auto;
-            animation: fadeUp 0.3s ease;
+            background: #fcf9f5;
         }
         .page.active-page {
             display: block;
         }
-        .page::-webkit-scrollbar { width: 5px; }
+        .page::-webkit-scrollbar { width: 4px; }
         .page::-webkit-scrollbar-thumb { background: #d6c9bb; border-radius: 10px; }
 
-        /* ============================================================ */
-        /* 首页：两栏铺满 */
-        /* ============================================================ */
-        .home-grid {
+        /* ================================================================ */
+        /* 首页 - 完全铺满 */
+        /* ================================================================ */
+        .home-layout {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
+            grid-template-columns: 1.4fr 0.6fr;
             gap: 20px;
             height: 100%;
             min-height: 0;
@@ -213,7 +199,7 @@
             gap: 14px;
             min-height: 0;
         }
-        .carousel {
+        .carousel-box {
             border-radius: 20px;
             overflow: hidden;
             background: #e7ddd2;
@@ -221,41 +207,40 @@
             min-height: 0;
             position: relative;
         }
-        .carousel img {
+        .carousel-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
         }
-        .carousel-caption {
+        .carousel-box .caption {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.4));
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
             color: white;
-            padding: 20px 18px 12px;
-            font-size: 20px;
+            padding: 24px 20px 14px;
+            font-size: 22px;
             font-weight: 600;
             text-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
-        .intro-card {
+        .info-card {
             background: #f6f1ea;
-            border-radius: 18px;
+            border-radius: 16px;
             padding: 14px 18px;
             font-size: 14px;
             color: #3d352b;
-            line-height: 1.6;
+            line-height: 1.7;
             flex-shrink: 0;
         }
-        .intro-card strong { color: #b48b6a; }
-        .quick-grid {
+        .info-card strong { color: #b48b6a; }
+        .quick-actions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             flex-shrink: 0;
         }
-        .quick-item {
+        .quick-actions .item {
             background: #f0e9e0;
             border-radius: 40px;
             padding: 12px 6px;
@@ -264,20 +249,20 @@
             font-weight: 500;
             color: #4f4236;
         }
-        .quick-item span { display: block; font-size: 24px; margin-bottom: 2px; }
+        .quick-actions .item span { display: block; font-size: 24px; margin-bottom: 2px; }
         .home-tip {
             font-size: 13px;
             color: #7a6e5d;
-            padding: 8px 0;
             text-align: center;
             background: #f0ebe4;
+            padding: 10px 0;
             border-radius: 40px;
             flex-shrink: 0;
         }
 
-        /* ============================================================ */
-        /* 猫咪档案库：网格铺满 */
-        /* ============================================================ */
+        /* ================================================================ */
+        /* 猫咪档案库 - 网格铺满 */
+        /* ================================================================ */
         .cat-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -286,40 +271,38 @@
             align-content: start;
         }
         .cat-card {
-            background: #ffffff;
-            border-radius: 20px;
+            background: white;
+            border-radius: 18px;
             padding: 14px;
             border: 1px solid #ede6dc;
-            transition: 0.1s;
         }
         .cat-card img {
             width: 100%;
-            height: 140px;
+            height: 150px;
             object-fit: cover;
-            border-radius: 16px;
+            border-radius: 14px;
             background: #ddd2c4;
         }
-        .cat-info {
+        .cat-card .info {
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             margin: 8px 0 2px;
         }
-        .cat-name { font-weight: 700; font-size: 17px; }
-        .cat-tag {
+        .cat-card .name { font-weight: 700; font-size: 17px; }
+        .cat-card .tag {
             background: #e8ddd0;
             padding: 2px 12px;
             border-radius: 30px;
             font-size: 11px;
         }
-        .cat-detail { font-size: 13px; color: #5e5142; margin: 0 0 6px; }
-        .cat-actions {
+        .cat-card .detail { font-size: 13px; color: #5e5142; margin: 0 0 6px; }
+        .cat-card .actions {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
         }
-        .cat-actions button {
+        .cat-card .actions button {
             background: #eae1d6;
             border: none;
             padding: 5px 14px;
@@ -328,30 +311,29 @@
             font-size: 12px;
             color: #3d352b;
             cursor: pointer;
-            transition: 0.1s;
         }
-        .cat-actions button:hover { background: #ddd0c0; }
-        .cat-actions .adopt-btn {
+        .cat-card .actions button:hover { background: #ddd0c0; }
+        .cat-card .actions .adopt {
             background: #b48b6a;
             color: white;
         }
-        .cat-actions .adopt-btn:hover { background: #a07a5c; }
-        .feedback-area {
+        .cat-card .actions .adopt:hover { background: #a07a5c; }
+        .feedback-box {
             margin-top: 8px;
             background: #f2ece4;
             padding: 8px 10px;
-            border-radius: 16px;
+            border-radius: 14px;
         }
-        .feedback-area textarea {
+        .feedback-box textarea {
             width: 100%;
             border: none;
             background: transparent;
             resize: vertical;
             font-size: 12px;
             outline: none;
-            min-height: 32px;
+            min-height: 30px;
         }
-        .feedback-area button {
+        .feedback-box button {
             background: #b48b6a;
             border: none;
             padding: 3px 14px;
@@ -362,16 +344,12 @@
             cursor: pointer;
             font-size: 12px;
         }
-        .feedback-list {
-            margin-top: 4px;
-            font-size: 12px;
-            color: #5e5142;
-        }
+        .feedback-list { font-size: 12px; color: #5e5142; margin-top: 4px; }
         .feedback-list div { padding: 2px 0; }
 
-        /* ============================================================ */
-        /* 互动区：两栏铺满 */
-        /* ============================================================ */
+        /* ================================================================ */
+        /* 互动区 - 两栏铺满 */
+        /* ================================================================ */
         .interact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -379,14 +357,14 @@
             height: 100%;
             align-content: start;
         }
-        .interact-item {
-            background: #ffffff;
-            border-radius: 20px;
+        .interact-box {
+            background: white;
+            border-radius: 18px;
             padding: 16px 18px;
             border: 1px solid #ede6dc;
         }
-        .interact-item h3 { font-size: 17px; margin-bottom: 10px; color: #2d2a24; }
-        .vote-area {
+        .interact-box h3 { font-size: 17px; margin-bottom: 10px; color: #2d2a24; }
+        .vote-list {
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -400,7 +378,7 @@
             border-radius: 40px;
         }
         .vote-row strong { font-size: 14px; }
-        .vote-btn {
+        .vote-row button {
             background: #b48b6a;
             border: none;
             padding: 3px 16px;
@@ -410,22 +388,22 @@
             cursor: pointer;
             font-size: 13px;
         }
-        .comment-box textarea {
+        .comment-area textarea {
             width: 100%;
             border: 1px solid #ddd2c4;
-            border-radius: 20px;
+            border-radius: 18px;
             padding: 10px 14px;
             background: white;
             resize: vertical;
             font-size: 13px;
         }
-        .upload-area {
+        .comment-area .upload-btns {
             display: flex;
             gap: 8px;
             margin: 8px 0;
             flex-wrap: wrap;
         }
-        .upload-area button {
+        .comment-area .upload-btns button {
             background: #ddd2c4;
             border: none;
             padding: 5px 16px;
@@ -434,24 +412,33 @@
             cursor: pointer;
             font-size: 13px;
         }
+        .comment-area .publish-btn {
+            background: #b48b6a;
+            border: none;
+            padding: 6px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
         .comment-item {
             margin-top: 10px;
             background: #f0e9e0;
             padding: 10px 14px;
-            border-radius: 16px;
+            border-radius: 14px;
             font-size: 13px;
         }
 
-        /* ============================================================ */
-        /* 智能助手：铺满 */
-        /* ============================================================ */
-        .ai-chat {
+        /* ================================================================ */
+        /* 智能助手 - 铺满 */
+        /* ================================================================ */
+        .ai-layout {
             height: 100%;
             display: flex;
             flex-direction: column;
             padding: 2px 0;
         }
-        .ai-chat .ai-header {
+        .ai-layout .ai-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -460,18 +447,15 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-        .ai-chat h3 {
-            font-size: 20px;
-            color: #2d2a24;
-        }
-        .ai-chat .api-badge {
+        .ai-layout .ai-header h3 { font-size: 20px; color: #2d2a24; }
+        .ai-layout .ai-header .badge {
             font-size: 13px;
             color: #6b5f4e;
             background: #ede6dc;
             padding: 4px 16px;
             border-radius: 40px;
         }
-        .ai-chat textarea {
+        .ai-layout textarea {
             width: 100%;
             border: 1px solid #e2d9cd;
             background: white;
@@ -483,11 +467,11 @@
             flex-shrink: 0;
             outline: none;
         }
-        .ai-chat textarea:focus {
+        .ai-layout textarea:focus {
             border-color: #c8ad8a;
             box-shadow: 0 0 0 3px rgba(200, 173, 138, 0.12);
         }
-        .ai-chat .btn-ai {
+        .ai-layout .btn-ai {
             background: #b48b6a;
             border: none;
             padding: 10px 30px;
@@ -501,28 +485,28 @@
             margin: 10px 0;
             flex-shrink: 0;
         }
-        .ai-chat .btn-ai:hover { background: #a07a5c; }
-        .ai-response {
+        .ai-layout .btn-ai:hover { background: #a07a5c; }
+        .ai-layout .response {
             background: white;
             padding: 18px 22px;
-            border-radius: 20px;
+            border-radius: 18px;
             flex: 1;
-            min-height: 100px;
+            min-height: 80px;
             font-size: 14px;
             line-height: 1.7;
             white-space: pre-wrap;
             border: 1px solid #e2d9cd;
             overflow-y: auto;
         }
-        .ai-footer {
+        .ai-layout .footer {
             font-size: 12px;
             color: #6b5f4e;
             margin-top: 8px;
             flex-shrink: 0;
         }
 
-        /* ----- 领养单模态 ----- */
-        .adopt-modal-overlay {
+        /* ===== 领养单模态 ===== */
+        .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.4);
@@ -532,18 +516,18 @@
             z-index: 999;
             backdrop-filter: blur(4px);
         }
-        .adopt-modal {
+        .modal-box {
             background: white;
             padding: 28px 32px;
-            border-radius: 36px;
-            max-width: 480px;
+            border-radius: 32px;
+            max-width: 460px;
             width: 90%;
             box-shadow: 0 30px 60px rgba(0,0,0,0.3);
             max-height: 90vh;
             overflow-y: auto;
         }
-        .adopt-modal h3 { font-size: 20px; margin-bottom: 14px; }
-        .adopt-modal input, .adopt-modal textarea {
+        .modal-box h3 { font-size: 20px; margin-bottom: 14px; }
+        .modal-box input, .modal-box textarea {
             width: 100%;
             padding: 12px 16px;
             margin: 4px 0 12px;
@@ -552,33 +536,27 @@
             background: #fcf9f5;
             font-size: 14px;
         }
-        .adopt-modal textarea { min-height: 60px; resize: vertical; }
-        .adopt-modal .modal-actions {
+        .modal-box textarea { min-height: 60px; resize: vertical; }
+        .modal-box .modal-actions {
             display: flex;
             gap: 12px;
             margin-top: 6px;
         }
-        .adopt-modal .modal-actions button {
+        .modal-box .modal-actions button {
             padding: 10px 28px;
             border-radius: 40px;
             border: none;
             font-weight: 600;
             cursor: pointer;
         }
-        .adopt-modal .btn-submit {
-            background: #b48b6a;
-            color: white;
-        }
-        .adopt-modal .btn-cancel {
-            background: #ddd2c4;
-            color: #3d352b;
-        }
+        .modal-box .btn-submit { background: #b48b6a; color: white; }
+        .modal-box .btn-cancel { background: #ddd2c4; color: #3d352b; }
 
-        /* ----- 底部导航 ----- */
+        /* ===== 底部导航 ===== */
         .bottom-nav {
             display: flex;
             justify-content: center;
-            gap: 14px;
+            gap: 12px;
             padding: 12px 0 2px;
             border-top: 1px solid #efe8df;
             flex-shrink: 0;
@@ -602,7 +580,7 @@
         }
         .nav-item span { display: block; font-size: 20px; margin-bottom: 1px; }
 
-        /* ----- 联系栏 ----- */
+        /* ===== 联系栏 ===== */
         .contact-bar {
             padding: 10px 0 2px;
             font-size: 13px;
@@ -614,32 +592,27 @@
         }
         .contact-bar span { margin: 0 16px; }
 
-        /* ----- 工具类 ----- */
-        .hidden { display: none !important; }
-
         /* ===== 响应式 ===== */
-        @media (max-width: 1100px) {
+        @media (max-width: 1000px) {
             .cat-grid { grid-template-columns: 1fr 1fr; }
         }
-        @media (max-width: 900px) {
-            .app-container { padding: 12px 16px 8px; border-radius: 28px; }
-            .home-grid { grid-template-columns: 1fr; }
+        @media (max-width: 850px) {
+            .home-layout { grid-template-columns: 1fr; }
             .interact-grid { grid-template-columns: 1fr; }
-            .cat-grid { grid-template-columns: 1fr 1fr; }
             .page { padding: 14px 16px; }
+            .top-bar { padding: 10px 16px 8px; }
         }
         @media (max-width: 600px) {
-            .app-container { padding: 8px 10px 4px; border-radius: 20px; }
-            .top-bar h1 { font-size: 18px; }
-            .top-bar .role-tag { font-size: 12px; padding: 4px 14px; }
             .cat-grid { grid-template-columns: 1fr; }
-            .quick-grid { grid-template-columns: 1fr 1fr; }
+            .quick-actions { grid-template-columns: 1fr 1fr; }
             .nav-item { padding: 4px 12px; font-size: 11px; }
             .nav-item span { font-size: 16px; }
             .page { padding: 10px 12px; }
-            .auth-panel .auth-box { padding: 20px 16px; }
+            .top-bar h1 { font-size: 18px; }
+            .top-bar .role-tag { font-size: 11px; padding: 4px 12px; }
+            .auth-panel .auth-box { padding: 24px 18px; }
             .contact-bar span { margin: 0 8px; font-size: 11px; }
-            .carousel-caption { font-size: 16px; padding: 12px 14px 8px; }
+            .carousel-box .caption { font-size: 16px; padding: 14px 14px 10px; }
         }
     </style>
 </head>
@@ -686,27 +659,27 @@
         <div class="page-container">
             <!-- 首页 -->
             <div class="page active-page" id="pageHome">
-                <div class="home-grid">
+                <div class="home-layout">
                     <div class="home-left">
-                        <div class="carousel" id="carousel">
-                            <img id="carouselImg" src="https://placecats.com/600/350?random=1" alt="流浪猫">
-                            <div class="carousel-caption">一起守护毛孩子</div>
+                        <div class="carousel-box" id="carousel">
+                            <img id="carouselImg" src="https://placecats.com/800/450?random=1" alt="流浪猫">
+                            <div class="caption">一起守护毛孩子</div>
                         </div>
-                        <div class="intro-card">
+                        <div class="info-card">
                             <strong>🐱 关于校园流浪猫</strong><br>
                             校园里的小精灵，它们需要我们的温柔相待。请保持距离，不要惊吓；定时投喂，干净水源。
                             <span style="display:block;margin-top:4px;">⚠️ 注意：不要随意触摸，避免应激。</span>
                         </div>
                     </div>
                     <div class="home-right">
-                        <div class="intro-card" style="flex-shrink:0;">
+                        <div class="info-card" style="flex-shrink:0;">
                             <strong>📢 守护行动</strong><br>
                             每一只流浪猫都值得被关爱。加入我们，用行动守护它们。
                         </div>
-                        <div class="quick-grid">
-                            <div class="quick-item"><span>📸</span> 猫咪相册</div>
-                            <div class="quick-item"><span>❤️</span> 领养中心</div>
-                            <div class="quick-item"><span>📋</span> 反馈建议</div>
+                        <div class="quick-actions">
+                            <div class="item"><span>📸</span> 猫咪相册</div>
+                            <div class="item"><span>❤️</span> 领养中心</div>
+                            <div class="item"><span>📋</span> 反馈建议</div>
                         </div>
                         <div class="home-tip">🐾 每3秒切换一张猫咪照片</div>
                     </div>
@@ -721,19 +694,19 @@
             <!-- 创意互动区 -->
             <div class="page" id="pageInteract">
                 <div class="interact-grid">
-                    <div class="interact-item">
+                    <div class="interact-box">
                         <h3>🐈 人气猫投票</h3>
-                        <div class="vote-area" id="voteArea"></div>
+                        <div class="vote-list" id="voteArea"></div>
                     </div>
-                    <div class="interact-item">
+                    <div class="interact-box">
                         <h3>💬 评论 & 手绘上传</h3>
-                        <div class="comment-box">
+                        <div class="comment-area">
                             <textarea placeholder="分享你与猫咪的故事…" rows="2"></textarea>
-                            <div class="upload-area">
+                            <div class="upload-btns">
                                 <button>📷 上传照片</button>
                                 <button>✏️ 上传手绘</button>
                             </div>
-                            <button style="background:#b48b6a;border:none;padding:6px 24px;border-radius:40px;color:white;font-weight:600;cursor:pointer;">发布</button>
+                            <button class="publish-btn">发布</button>
                         </div>
                         <div class="comment-item">🐾 最新评论： “小橘太可爱了！”</div>
                         <div class="comment-item">🐾 热门手绘： 用户上传了一张小黑的素描</div>
@@ -743,15 +716,15 @@
 
             <!-- 智能助手 -->
             <div class="page" id="pageAI">
-                <div class="ai-chat">
+                <div class="ai-layout">
                     <div class="ai-header">
                         <h3>🤖 免费AI 猫咪助手</h3>
-                        <span class="api-badge">✅ 内置免费API</span>
+                        <span class="badge">✅ 内置免费API</span>
                     </div>
                     <textarea placeholder="问关于猫咪的问题…" id="aiQuestion" rows="2">如何照顾幼猫？</textarea>
                     <button class="btn-ai" id="aiAskBtn">咨询 AI</button>
-                    <div class="ai-response" id="aiResponse">💡 输入问题，点击咨询即可获得免费回答。</div>
-                    <div class="ai-footer">🔗 使用社区免费API (每日有限额)</div>
+                    <div class="response" id="aiResponse">💡 输入问题，点击咨询即可获得免费回答。</div>
+                    <div class="footer">🔗 使用社区免费API (每日有限额)</div>
                 </div>
             </div>
         </div>
@@ -772,7 +745,7 @@
     </div>
 </div>
 
-<!-- ===== 领养单模态容器 ===== -->
+<!-- ===== 领养单模态 ===== -->
 <div id="adoptModalContainer"></div>
 
 <script>
@@ -787,7 +760,6 @@
         let currentRole = 'user';
         let isLoggedIn = false;
 
-        // DOM
         const authPanel = document.getElementById('authPanel');
         const mainApp = document.getElementById('mainApp');
         const roleTag = document.getElementById('roleTag');
@@ -859,9 +831,9 @@
 
         // 轮播
         const carouselImages = [
-            'https://placecats.com/600/350?random=5',
-            'https://placecats.com/600/350?random=6',
-            'https://placecats.com/600/350?random=7'
+            'https://placecats.com/800/450?random=5',
+            'https://placecats.com/800/450?random=6',
+            'https://placecats.com/800/450?random=7'
         ];
         let carouselInterval = null;
         function setupCarousel() {
@@ -884,17 +856,17 @@
                 html += `
                     <div class="cat-card" data-catid="${cat.id}">
                         <img src="${cat.img}" alt="${cat.name}">
-                        <div class="cat-info">
-                            <span class="cat-name">${cat.name} (${cat.gender})</span>
-                            <span class="cat-tag">${cat.neutered}</span>
+                        <div class="info">
+                            <span class="name">${cat.name} (${cat.gender})</span>
+                            <span class="tag">${cat.neutered}</span>
                         </div>
-                        <div class="cat-detail">性格: ${cat.personality}  · 爱好: ${cat.hobby}</div>
-                        <div class="cat-actions">
+                        <div class="detail">性格: ${cat.personality}  · 爱好: ${cat.hobby}</div>
+                        <div class="actions">
                             <button class="feedback-toggle" data-id="${cat.id}">💬 反馈</button>
                             <button class="adopt-btn" data-id="${cat.id}">🏠 领养</button>
                             ${currentRole === 'admin' ? `<span style="font-size:11px;background:#d6c4b0;padding:0 10px;border-radius:40px;">📩 ${feedbacks[cat.id]?feedbacks[cat.id].length:0}条</span>` : ''}
                         </div>
-                        <div class="feedback-area" id="feedback-${cat.id}" style="display:none;">
+                        <div class="feedback-box" id="feedback-${cat.id}" style="display:none;">
                             <textarea placeholder="添加关于 ${cat.name} 的反馈..." rows="2"></textarea>
                             <button class="submit-feedback" data-id="${cat.id}">提交反馈</button>
                             <div class="feedback-list">${feedbackList}</div>
@@ -943,8 +915,8 @@
         // 领养单
         function showAdoptModal(cat) {
             adoptModalContainer.innerHTML = `
-                <div class="adopt-modal-overlay" id="adoptOverlay">
-                    <div class="adopt-modal">
+                <div class="modal-overlay" id="adoptOverlay">
+                    <div class="modal-box">
                         <h3>📋 领养申请表 - ${cat.name}</h3>
                         <input type="text" placeholder="你的姓名" id="adoptName">
                         <input type="text" placeholder="联系电话" id="adoptPhone">
@@ -1011,7 +983,7 @@
         function updatePopularCat() {
             if (cats.length) {
                 const top = cats.reduce((a,b) => a.votes > b.votes ? a : b);
-                const h3 = document.querySelector('#pageInteract .interact-item h3');
+                const h3 = document.querySelector('#pageInteract .interact-box h3');
                 if (h3) h3.innerHTML = `🐈 人气猫: ${top.name} (${top.votes}票)`;
             }
         }
@@ -1073,7 +1045,6 @@
             });
         });
 
-        // 初始化
         window.addEventListener('load', function() {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById('pageHome').classList.add('active-page');
