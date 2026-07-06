@@ -21,6 +21,9 @@ let uploads = { 1: [], 2: [], 3: [] };
 // 投票记录：{ userId: { catId: date } }
 let voteRecords = {};
 
+// 评论数据：{ catId: [ { id, user, text, time, replies: [ { user, text, time } ] } ] }
+let comments = { 1: [], 2: [], 3: [] };
+
 // 当前用户
 let currentUser = '';
 let currentRole = 'user';
@@ -38,6 +41,7 @@ function loadData() {
             if (data.voteRecords) voteRecords = data.voteRecords;
             if (data.feedbacks) feedbacks = data.feedbacks;
             if (data.cats) cats = data.cats;
+            if (data.comments) comments = data.comments;
         }
     } catch (e) {
         console.warn('加载数据失败', e);
@@ -50,9 +54,15 @@ function saveData() {
             uploads,
             voteRecords,
             feedbacks,
-            cats
+            cats,
+            comments
         }));
     } catch (e) {
         console.warn('保存数据失败', e);
     }
+}
+
+// 生成短ID
+function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
 }
