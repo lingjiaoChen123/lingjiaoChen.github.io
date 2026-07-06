@@ -4,10 +4,1020 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>校园流浪猫守护平台</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: #f0ebe4;
+            overflow: hidden;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            max-width: 1600px;
+            max-height: 1100px;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ===== 登录/注册 ===== */
+        .auth-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            background: #fcf9f5;
+        }
+        .auth-panel .auth-box {
+            width: 100%;
+            max-width: 440px;
+            background: white;
+            padding: 40px 36px;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+        .auth-panel h2 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #2d2a24;
+        }
+        .auth-panel .auth-sub {
+            color: #7a6e5d;
+            font-size: 15px;
+            margin: 4px 0 24px;
+            border-left: 4px solid #e8b88a;
+            padding-left: 14px;
+        }
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: 600;
+            color: #8a7e6b;
+            border-radius: 40px;
+            background: #f3efe8;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 15px;
+        }
+        .auth-tab.active {
+            background: #d9c9b4;
+            color: #2d2a24;
+        }
+        .auth-form input {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            border: 1px solid #e2d9cd;
+            border-radius: 40px;
+            background: #fcf9f5;
+            font-size: 15px;
+            outline: none;
+        }
+        .auth-form input:focus {
+            border-color: #c8ad8a;
+            box-shadow: 0 0 0 3px rgba(200, 173, 138, 0.12);
+        }
+        .auth-form .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: #b48b6a;
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 17px;
+            margin: 6px 0 12px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .auth-form .btn-primary:hover {
+            background: #a07a5c;
+        }
+        .auth-extra {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #7a6e5d;
+        }
+        .auth-extra span {
+            color: #b48b6a;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===== 主应用 ===== */
+        .main-app {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 28px 10px 28px;
+            flex-shrink: 0;
+            border-bottom: 1px solid #f0ebe4;
+        }
+        .top-bar h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2d2a24;
+        }
+        .top-bar .right-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .top-bar .role-tag {
+            background: #e5dbd0;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4d4033;
+        }
+        .top-bar .logout-btn {
+            background: #e8ddd0;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b5f4e;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .top-bar .logout-btn:hover {
+            background: #d6c9bb;
+        }
+
+        .page-container {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 20px 28px;
+            overflow-y: auto;
+            background: #fcf9f5;
+        }
+        .page.active-page {
+            display: block;
+        }
+        .page::-webkit-scrollbar {
+            width: 4px;
+        }
+        .page::-webkit-scrollbar-thumb {
+            background: #d6c9bb;
+            border-radius: 10px;
+        }
+
+        /* ===== 首页 ===== */
+        .home-layout {
+            display: grid;
+            grid-template-columns: 1.4fr 0.6fr;
+            gap: 20px;
+            height: 100%;
+            min-height: 0;
+        }
+        .home-left {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 0;
+        }
+        .home-right {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 0;
+        }
+        .carousel-box {
+            border-radius: 20px;
+            overflow: hidden;
+            background: #e7ddd2;
+            flex: 1;
+            min-height: 0;
+            position: relative;
+        }
+        .carousel-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-box .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+            color: white;
+            padding: 24px 20px 14px;
+            font-size: 22px;
+            font-weight: 600;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .info-card {
+            background: #f6f1ea;
+            border-radius: 16px;
+            padding: 14px 18px;
+            font-size: 14px;
+            color: #3d352b;
+            line-height: 1.7;
+            flex-shrink: 0;
+        }
+        .info-card strong {
+            color: #b48b6a;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .quick-actions .item {
+            background: #f0e9e0;
+            border-radius: 40px;
+            padding: 12px 6px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4f4236;
+        }
+        .quick-actions .item span {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+        .home-tip {
+            font-size: 13px;
+            color: #7a6e5d;
+            text-align: center;
+            background: #f0ebe4;
+            padding: 10px 0;
+            border-radius: 40px;
+            flex-shrink: 0;
+        }
+
+        /* ===== 猫咪档案库 ===== */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            height: 100%;
+            align-content: start;
+        }
+        .cat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 14px;
+            border: 1px solid #ede6dc;
+        }
+        .cat-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 14px;
+            background: #ddd2c4;
+        }
+        .cat-card .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0 2px;
+        }
+        .cat-card .name {
+            font-weight: 700;
+            font-size: 17px;
+        }
+        .cat-card .tag {
+            background: #e8ddd0;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+        }
+        .cat-card .detail {
+            font-size: 13px;
+            color: #5e5142;
+            margin: 0 0 6px;
+        }
+        .cat-card .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .cat-card .actions button {
+            background: #eae1d6;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 12px;
+            color: #3d352b;
+            cursor: pointer;
+        }
+        .cat-card .actions button:hover {
+            background: #ddd0c0;
+        }
+        .cat-card .actions .adopt {
+            background: #b48b6a;
+            color: white;
+        }
+        .cat-card .actions .adopt:hover {
+            background: #a07a5c;
+        }
+        .feedback-box {
+            margin-top: 8px;
+            background: #f2ece4;
+            padding: 8px 10px;
+            border-radius: 14px;
+        }
+        .feedback-box textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            resize: vertical;
+            font-size: 12px;
+            outline: none;
+            min-height: 30px;
+        }
+        .feedback-box button {
+            background: #b48b6a;
+            border: none;
+            padding: 3px 14px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            margin-top: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .feedback-list {
+            font-size: 12px;
+            color: #5e5142;
+            margin-top: 4px;
+        }
+        .feedback-list div {
+            padding: 2px 0;
+        }
+
+        /* ===== 互动区 ===== */
+        .interact-layout {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            gap: 16px;
+            min-height: 0;
+        }
+        .vote-section {
+            flex-shrink: 0;
+            background: white;
+            border-radius: 18px;
+            padding: 16px 20px;
+            border: 1px solid #ede6dc;
+        }
+        .vote-section .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2d2a24;
+            margin-bottom: 12px;
+        }
+        .vote-section .section-title span {
+            color: #b48b6a;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .vote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+        }
+        .vote-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f6f1ea;
+            border-radius: 16px;
+            padding: 10px 14px;
+            transition: 0.15s;
+        }
+        .vote-item:hover {
+            background: #ede6dc;
+        }
+        .vote-item .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ddd2c4;
+            flex-shrink: 0;
+        }
+        .vote-item .info {
+            flex: 1;
+            min-width: 0;
+        }
+        .vote-item .info .name {
+            font-weight: 600;
+            font-size: 15px;
+            color: #2d2a24;
+        }
+        .vote-item .info .votes {
+            font-size: 13px;
+            color: #7a6e5d;
+        }
+        .vote-item .info .votes span {
+            color: #b48b6a;
+            font-weight: 700;
+        }
+        .vote-item .vote-btn {
+            background: #b48b6a;
+            border: none;
+            padding: 4px 16px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: 0.15s;
+        }
+        .vote-item .vote-btn:hover {
+            background: #a07a5c;
+        }
+        .vote-item .vote-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .vote-item .vote-btn.voted {
+            background: #8a9a8a;
+        }
+
+        .upload-section {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-right: 4px;
+        }
+        .upload-section::-webkit-scrollbar {
+            width: 4px;
+        }
+        .upload-section::-webkit-scrollbar-thumb {
+            background: #d6c9bb;
+            border-radius: 10px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 18px;
+            padding: 16px 18px;
+            border: 1px solid #ede6dc;
+            flex-shrink: 0;
+        }
+        .upload-card .cat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .upload-card .cat-header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ddd2c4;
+            flex-shrink: 0;
+        }
+        .upload-card .cat-header .name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #2d2a24;
+        }
+        .upload-card .upload-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .upload-card .upload-area label {
+            background: #eae1d6;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #3d352b;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .upload-card .upload-area label:hover {
+            background: #ddd0c0;
+        }
+        .upload-card .upload-area input[type="file"] {
+            display: none;
+        }
+        .upload-card .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .upload-card .gallery .media-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #ede6dc;
+            flex-shrink: 0;
+        }
+        .upload-card .gallery .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .upload-card .gallery .media-item .tag {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 30px;
+        }
+        .upload-card .gallery .media-item .delete-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .upload-card .gallery .media-item .delete-btn:hover {
+            background: rgba(200, 0, 0, 0.9);
+        }
+        .upload-card .empty-gallery {
+            color: #aaa;
+            font-size: 13px;
+            padding: 8px 0;
+        }
+
+        /* ===== 评论区域 ===== */
+        .comment-section {
+            margin-top: 12px;
+            border-top: 1px solid #f0ebe4;
+            padding-top: 12px;
+        }
+        .comment-section .comment-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .comment-section .comment-input-row textarea {
+            flex: 1;
+            border: 1px solid #e2d9cd;
+            border-radius: 20px;
+            padding: 10px 14px;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 40px;
+            max-height: 80px;
+            outline: none;
+            background: #fcf9f5;
+            font-family: inherit;
+        }
+        .comment-section .comment-input-row textarea:focus {
+            border-color: #c8ad8a;
+        }
+        .comment-section .comment-input-row .send-btn {
+            background: #b48b6a;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: 0.15s;
+            height: 40px;
+        }
+        .comment-section .comment-input-row .send-btn:hover {
+            background: #a07a5c;
+        }
+
+        .comment-list {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .comment-list::-webkit-scrollbar {
+            width: 3px;
+        }
+        .comment-list::-webkit-scrollbar-thumb {
+            background: #d6c9bb;
+            border-radius: 10px;
+        }
+
+        .comment-item {
+            background: #f6f1ea;
+            border-radius: 14px;
+            padding: 10px 14px;
+            animation: fadeIn 0.2s ease;
+        }
+        .comment-item .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .comment-item .comment-meta .comment-user {
+            font-weight: 600;
+            font-size: 13px;
+            color: #2d2a24;
+        }
+        .comment-item .comment-meta .comment-time {
+            font-size: 11px;
+            color: #999;
+        }
+        .comment-item .comment-meta .reply-btn {
+            background: none;
+            border: none;
+            color: #b48b6a;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .comment-item .comment-meta .reply-btn:hover {
+            text-decoration: underline;
+        }
+        .comment-item .comment-text {
+            font-size: 14px;
+            color: #3d352b;
+            line-height: 1.5;
+        }
+
+        .comment-item .replies {
+            margin-left: 20px;
+            margin-top: 8px;
+            padding-left: 12px;
+            border-left: 2px solid #ddd2c4;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .comment-item .replies .reply-item {
+            background: #ede6dc;
+            border-radius: 12px;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        .comment-item .replies .reply-item .reply-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .comment-item .replies .reply-item .reply-meta .reply-user {
+            font-weight: 600;
+            font-size: 12px;
+            color: #2d2a24;
+        }
+        .comment-item .replies .reply-item .reply-meta .reply-time {
+            font-size: 10px;
+            color: #999;
+        }
+        .comment-item .replies .reply-item .reply-text {
+            font-size: 13px;
+            color: #3d352b;
+            margin-top: 2px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .comment-empty {
+            color: #bbb;
+            font-size: 13px;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+        /* ===== 智能助手 ===== */
+        .ai-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 2px 0;
+        }
+        .ai-layout .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .ai-layout .ai-header h3 {
+            font-size: 20px;
+            color: #2d2a24;
+        }
+        .ai-layout .ai-header .badge {
+            font-size: 13px;
+            color: #6b5f4e;
+            background: #ede6dc;
+            padding: 4px 16px;
+            border-radius: 40px;
+        }
+        .ai-layout textarea {
+            width: 100%;
+            border: 1px solid #e2d9cd;
+            background: white;
+            border-radius: 40px;
+            padding: 14px 18px;
+            font-size: 15px;
+            resize: none;
+            min-height: 60px;
+            flex-shrink: 0;
+            outline: none;
+        }
+        .ai-layout textarea:focus {
+            border-color: #c8ad8a;
+            box-shadow: 0 0 0 3px rgba(200, 173, 138, 0.12);
+        }
+        .ai-layout .btn-ai {
+            background: #b48b6a;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: 0.15s;
+            margin: 10px 0;
+            flex-shrink: 0;
+        }
+        .ai-layout .btn-ai:hover {
+            background: #a07a5c;
+        }
+        .ai-layout .response {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 18px;
+            flex: 1;
+            min-height: 80px;
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            border: 1px solid #e2d9cd;
+            overflow-y: auto;
+        }
+        .ai-layout .footer {
+            font-size: 12px;
+            color: #6b5f4e;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        /* ===== 领养单模态 ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
+        .modal-box {
+            background: white;
+            padding: 28px 32px;
+            border-radius: 32px;
+            max-width: 460px;
+            width: 90%;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-box h3 {
+            font-size: 20px;
+            margin-bottom: 14px;
+        }
+        .modal-box input,
+        .modal-box textarea {
+            width: 100%;
+            padding: 12px 16px;
+            margin: 4px 0 12px;
+            border: 1px solid #ddd2c4;
+            border-radius: 40px;
+            background: #fcf9f5;
+            font-size: 14px;
+        }
+        .modal-box textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .modal-box .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .modal-box .modal-actions button {
+            padding: 10px 28px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-box .btn-submit {
+            background: #b48b6a;
+            color: white;
+        }
+        .modal-box .btn-cancel {
+            background: #ddd2c4;
+            color: #3d352b;
+        }
+
+        /* ===== 底部导航 ===== */
+        .bottom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 0 2px;
+            border-top: 1px solid #efe8df;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 13px;
+            color: #9a8d7b;
+            font-weight: 500;
+            padding: 6px 24px;
+            cursor: pointer;
+            border-radius: 40px;
+            background: transparent;
+            transition: 0.15s;
+        }
+        .nav-item.active {
+            color: #b48b6a;
+            background: #f3ede6;
+            font-weight: 600;
+        }
+        .nav-item span {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 1px;
+        }
+
+        .contact-bar {
+            padding: 10px 0 2px;
+            font-size: 13px;
+            color: #6b5f4e;
+            text-align: center;
+            border-top: 1px solid #e8dfd4;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .contact-bar span {
+            margin: 0 16px;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 1000px) {
+            .cat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 850px) {
+            .home-layout {
+                grid-template-columns: 1fr;
+            }
+            .page {
+                padding: 14px 16px;
+            }
+            .top-bar {
+                padding: 10px 16px 8px;
+            }
+            .vote-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .cat-grid {
+                grid-template-columns: 1fr;
+            }
+            .quick-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+            .nav-item {
+                padding: 4px 12px;
+                font-size: 11px;
+            }
+            .nav-item span {
+                font-size: 16px;
+            }
+            .page {
+                padding: 10px 12px;
+            }
+            .top-bar h1 {
+                font-size: 18px;
+            }
+            .top-bar .role-tag {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+            .auth-panel .auth-box {
+                padding: 24px 18px;
+            }
+            .contact-bar span {
+                margin: 0 8px;
+                font-size: 11px;
+            }
+            .carousel-box .caption {
+                font-size: 16px;
+                padding: 14px 14px 10px;
+            }
+            .vote-grid {
+                grid-template-columns: 1fr;
+            }
+            .upload-card .gallery .media-item {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container" id="app">
+
         <!-- ===== 登录注册面板 ===== -->
         <div class="auth-panel" id="authPanel">
             <div class="auth-box">
@@ -24,6 +1034,9 @@
                     <div class="auth-extra">
                         <span>忘记密码？</span>
                         <span id="switchToRegister">注册账号</span>
+                    </div>
+                    <div style="margin-top:12px;font-size:12px;color:#999;text-align:center;">
+                        管理员: admin / 密码: admin123
                     </div>
                 </div>
                 <div class="auth-form hidden" id="registerForm">
@@ -128,13 +1141,709 @@
     <!-- ===== 领养单模态 ===== -->
     <div id="adoptModalContainer"></div>
 
-    <!-- ===== 脚本加载 ===== -->
-    <script src="scripts/data.js"></script>
-    <script src="scripts/auth.js"></script>
-    <script src="scripts/home.js"></script>
-    <script src="scripts/cats.js"></script>
-    <script src="scripts/interact.js"></script>
-    <script src="scripts/ai.js"></script>
-    <script src="scripts/app.js"></script>
+    <script>
+        // ================================================================
+        // 数据管理
+        // ================================================================
+
+        // 猫咪数据
+        let cats = [
+            { id: 1, name: '小橘', gender: '♂', neutered: '已绝育', personality: '粘人', hobby: '晒太阳',
+                img: 'https://placecats.com/300/200?random=2', votes: 12 },
+            { id: 2, name: '奶牛', gender: '♀', neutered: '未绝育', personality: '高冷', hobby: '爬树',
+                img: 'https://placecats.com/300/200?random=3', votes: 8 },
+            { id: 3, name: '小黑', gender: '♂', neutered: '已绝育', personality: '胆小', hobby: '钻箱子',
+                img: 'https://placecats.com/300/200?random=4', votes: 5 },
+        ];
+
+        let feedbacks = { 1: [], 2: [], 3: [] };
+        let uploads = { 1: [], 2: [], 3: [] };
+        let voteRecords = {};
+        let comments = { 1: [], 2: [], 3: [] };
+
+        let currentUser = '';
+        let currentRole = 'user';
+        let isLoggedIn = false;
+
+        // ================================================================
+        // localStorage 读写
+        // ================================================================
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('cat_platform_data');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.uploads) uploads = data.uploads;
+                    if (data.voteRecords) voteRecords = data.voteRecords;
+                    if (data.feedbacks) feedbacks = data.feedbacks;
+                    if (data.cats) cats = data.cats;
+                    if (data.comments) comments = data.comments;
+                }
+            } catch (e) {
+                console.warn('加载数据失败', e);
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('cat_platform_data', JSON.stringify({
+                    uploads,
+                    voteRecords,
+                    feedbacks,
+                    cats,
+                    comments
+                }));
+            } catch (e) {
+                console.warn('保存数据失败', e);
+            }
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+        }
+
+        // ================================================================
+        // 登录逻辑
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🐾 校园流浪猫守护平台 v1.0');
+
+            // 加载数据
+            loadData();
+
+            // 登录注册切换
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    if (this.dataset.tab === 'login') {
+                        document.getElementById('loginForm').classList.remove('hidden');
+                        document.getElementById('registerForm').classList.add('hidden');
+                    } else {
+                        document.getElementById('loginForm').classList.add('hidden');
+                        document.getElementById('registerForm').classList.remove('hidden');
+                    }
+                });
+            });
+
+            document.getElementById('switchToRegister').addEventListener('click', () => {
+                document.querySelector('.auth-tab[data-tab="register"]').click();
+            });
+            document.getElementById('switchToLogin').addEventListener('click', () => {
+                document.querySelector('.auth-tab[data-tab="login"]').click();
+            });
+
+            // ===== 登录 =====
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                const user = document.getElementById('loginUser').value.trim();
+                const pass = document.getElementById('loginPass').value.trim();
+
+                if (!user || !pass) {
+                    alert('请输入账号和密码');
+                    return;
+                }
+
+                // 读取用户数据
+                let users = {};
+                try {
+                    users = JSON.parse(localStorage.getItem('cat_users') || '{}');
+                } catch (e) {
+                    users = {};
+                }
+
+                // 检查是否为管理员
+                if (user === 'admin' && pass === 'admin123') {
+                    currentRole = 'admin';
+                    currentUser = user;
+                    isLoggedIn = true;
+                    loadData();
+                    enterApp();
+                    return;
+                }
+
+                // 普通用户登录
+                if (users[user] && users[user] === pass) {
+                    currentRole = 'user';
+                    currentUser = user;
+                    isLoggedIn = true;
+                    loadData();
+                    enterApp();
+                    return;
+                }
+
+                // 如果用户不存在，自动注册并登录
+                if (!users[user]) {
+                    users[user] = pass;
+                    localStorage.setItem('cat_users', JSON.stringify(users));
+                    currentRole = 'user';
+                    currentUser = user;
+                    isLoggedIn = true;
+                    loadData();
+                    enterApp();
+                    alert('✅ 新用户注册成功！自动登录');
+                    return;
+                }
+
+                alert('❌ 密码错误！');
+            });
+
+            // ===== 注册 =====
+            document.getElementById('registerBtn').addEventListener('click', function() {
+                const name = document.getElementById('regName').value.trim();
+                const user = document.getElementById('regUser').value.trim();
+                const pass = document.getElementById('regPass').value.trim();
+
+                if (!name || !user || !pass) {
+                    alert('请完整填写注册信息');
+                    return;
+                }
+
+                let users = {};
+                try {
+                    users = JSON.parse(localStorage.getItem('cat_users') || '{}');
+                } catch (e) {
+                    users = {};
+                }
+
+                if (users[user]) {
+                    alert('❌ 账号已存在，请直接登录');
+                    return;
+                }
+
+                users[user] = pass;
+                localStorage.setItem('cat_users', JSON.stringify(users));
+
+                let userProfiles = {};
+                try {
+                    userProfiles = JSON.parse(localStorage.getItem('cat_profiles') || '{}');
+                } catch (e) {
+                    userProfiles = {};
+                }
+                userProfiles[user] = name;
+                localStorage.setItem('cat_profiles', JSON.stringify(userProfiles));
+
+                alert('✅ 注册成功！请登录');
+                document.querySelector('.auth-tab[data-tab="login"]').click();
+                document.getElementById('loginUser').value = user;
+                document.getElementById('loginPass').value = pass;
+            });
+
+            // ===== 退出登录 =====
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('确定要退出登录吗？')) {
+                    isLoggedIn = false;
+                    currentUser = '';
+                    currentRole = 'user';
+                    document.getElementById('mainApp').style.display = 'none';
+                    document.getElementById('authPanel').style.display = 'flex';
+                    document.getElementById('loginPass').value = '';
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    document.querySelector('.nav-item[data-page="pageHome"]').classList.add('active');
+                }
+            });
+
+            // ===== 导航切换 =====
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    const pageId = this.dataset.page;
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+                    document.getElementById(pageId).classList.add('active-page');
+
+                    if (pageId === 'pageInteract' && isLoggedIn) {
+                        renderVoteAndUpload();
+                    }
+                    if (pageId === 'pageCats' && isLoggedIn) {
+                        renderCats();
+                    }
+                });
+            });
+        });
+
+        // ================================================================
+        // 登录成功后进入应用
+        // ================================================================
+        function enterApp() {
+            document.getElementById('authPanel').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            document.getElementById('roleTag').textContent = currentRole === 'admin' ? '管理员' : '普通用户';
+
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById('pageHome').classList.add('active-page');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelector('.nav-item[data-page="pageHome"]').classList.add('active');
+
+            // 渲染各模块
+            setTimeout(function() {
+                renderCats();
+                renderVoteAndUpload();
+                setupCarousel();
+                updatePopularCat();
+            }, 100);
+        }
+
+        // ================================================================
+        // 首页 - 轮播
+        // ================================================================
+        const carouselImages = [
+            'https://placecats.com/800/450?random=5',
+            'https://placecats.com/800/450?random=6',
+            'https://placecats.com/800/450?random=7'
+        ];
+        let carouselInterval = null;
+
+        function setupCarousel() {
+            const img = document.getElementById('carouselImg');
+            if (!img) return;
+            let idx = 0;
+            img.src = carouselImages[0];
+            if (carouselInterval) clearInterval(carouselInterval);
+            carouselInterval = setInterval(() => {
+                idx = (idx + 1) % carouselImages.length;
+                img.src = carouselImages[idx];
+            }, 3000);
+        }
+
+        // ================================================================
+        // 猫咪档案库
+        // ================================================================
+        function renderCats() {
+            const catListEl = document.getElementById('catList');
+            if (!catListEl) return;
+
+            let html = '';
+            cats.forEach(cat => {
+                const feedbackList = (feedbacks[cat.id] || []).map(f => `<div>• ${f}</div>`).join('');
+                html += `
+                        <div class="cat-card" data-catid="${cat.id}">
+                            <img src="${cat.img}" alt="${cat.name}">
+                            <div class="info">
+                                <span class="name">${cat.name} (${cat.gender})</span>
+                                <span class="tag">${cat.neutered}</span>
+                            </div>
+                            <div class="detail">性格: ${cat.personality}  · 爱好: ${cat.hobby}</div>
+                            <div class="actions">
+                                <button class="feedback-toggle" data-id="${cat.id}">💬 反馈</button>
+                                <button class="adopt-btn" data-id="${cat.id}">🏠 领养</button>
+                                ${currentRole === 'admin' ? `<span style="font-size:11px;background:#d6c4b0;padding:0 10px;border-radius:40px;">📩 ${(feedbacks[cat.id] || []).length}条</span>` : ''}
+                            </div>
+                            <div class="feedback-box" id="feedback-${cat.id}" style="display:none;">
+                                <textarea placeholder="添加关于 ${cat.name} 的反馈..." rows="2"></textarea>
+                                <button class="submit-feedback" data-id="${cat.id}">提交反馈</button>
+                                <div class="feedback-list">${feedbackList}</div>
+                            </div>
+                        </div>
+                    `;
+            });
+            catListEl.innerHTML = html;
+
+            document.querySelectorAll('.feedback-toggle').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const area = document.getElementById(`feedback-${id}`);
+                    if (area) area.style.display = area.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+
+            document.querySelectorAll('.submit-feedback').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    const area = document.getElementById(`feedback-${id}`);
+                    const textarea = area.querySelector('textarea');
+                    const val = textarea.value.trim();
+                    if (val) {
+                        if (!feedbacks[id]) feedbacks[id] = [];
+                        feedbacks[id].push(val);
+                        textarea.value = '';
+                        saveData();
+                        renderCats();
+                        if (currentRole === 'admin') alert('📬 管理员收到新反馈');
+                    } else {
+                        alert('请输入反馈内容');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.adopt-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    const cat = cats.find(c => c.id === id);
+                    if (!cat) return;
+                    showAdoptModal(cat);
+                });
+            });
+        }
+
+        // ================================================================
+        // 领养单
+        // ================================================================
+        function showAdoptModal(cat) {
+            const container = document.getElementById('adoptModalContainer');
+            container.innerHTML = `
+                    <div class="modal-overlay" id="adoptOverlay">
+                        <div class="modal-box">
+                            <h3>📋 领养申请表 - ${cat.name}</h3>
+                            <input type="text" placeholder="你的姓名" id="adoptName">
+                            <input type="text" placeholder="联系电话" id="adoptPhone">
+                            <input type="text" placeholder="住址 (校区/宿舍)" id="adoptAddr">
+                            <textarea placeholder="领养理由..." rows="2" id="adoptReason"></textarea>
+                            <div class="modal-actions">
+                                <button class="btn-submit" id="submitAdopt">提交申请</button>
+                                <button class="btn-cancel" id="closeAdopt">取消</button>
+                            </div>
+                            <div style="margin-top:6px;font-size:12px;color:#6b5f4e;">📩 提交后管理员将收到领养信息</div>
+                        </div>
+                    </div>
+                `;
+            document.getElementById('submitAdopt').addEventListener('click', function() {
+                const name = document.getElementById('adoptName').value.trim();
+                const phone = document.getElementById('adoptPhone').value.trim();
+                const addr = document.getElementById('adoptAddr').value.trim();
+                const reason = document.getElementById('adoptReason').value.trim();
+                if (name && phone && addr && reason) {
+                    alert(`✅ 领养申请已提交给管理员！ (${cat.name})`);
+                    container.innerHTML = '';
+                    if (currentRole === 'admin') {
+                        alert('📋 管理员收到新的领养申请');
+                    }
+                } else {
+                    alert('请完整填写领养单');
+                }
+            });
+            document.getElementById('closeAdopt').addEventListener('click', function() {
+                container.innerHTML = '';
+            });
+            document.getElementById('adoptOverlay').addEventListener('click', function(e) {
+                if (e.target === this) container.innerHTML = '';
+            });
+        }
+
+        // ================================================================
+        // 互动区
+        // ================================================================
+        function renderVoteAndUpload() {
+            renderVotes();
+            renderUploads();
+            updatePopularCat();
+        }
+
+        function renderVotes() {
+            const voteGrid = document.getElementById('voteGrid');
+            if (!voteGrid) return;
+
+            const today = new Date().toDateString();
+            const userKey = currentUser || 'anonymous';
+            const userVotes = voteRecords[userKey] || {};
+
+            let html = '';
+            const sorted = [...cats].sort((a, b) => b.votes - a.votes);
+            sorted.forEach(cat => {
+                const hasVoted = userVotes[cat.id] === today;
+                html += `
+                        <div class="vote-item">
+                            <img class="avatar" src="${cat.img}" alt="${cat.name}">
+                            <div class="info">
+                                <div class="name">${cat.name}</div>
+                                <div class="votes">❤️ <span>${cat.votes}</span> 票</div>
+                            </div>
+                            <button class="vote-btn ${hasVoted ? 'voted' : ''}" data-id="${cat.id}" ${hasVoted ? 'disabled' : ''}>
+                                ${hasVoted ? '✅ 已投票' : '+1 投票'}
+                            </button>
+                        </div>
+                    `;
+            });
+            voteGrid.innerHTML = html;
+
+            document.querySelectorAll('.vote-item .vote-btn:not([disabled])').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    const cat = cats.find(c => c.id === id);
+                    if (!cat) return;
+
+                    const userKey = currentUser || 'anonymous';
+                    const today = new Date().toDateString();
+                    if (!voteRecords[userKey]) voteRecords[userKey] = {};
+                    if (voteRecords[userKey][id] === today) {
+                        alert('你今天已经给这只猫投过票了！');
+                        return;
+                    }
+
+                    for (let key in voteRecords[userKey]) {
+                        if (voteRecords[userKey][key] === today) {
+                            alert('你今天已经投过票了，每人每天只有一票！');
+                            return;
+                        }
+                    }
+
+                    cat.votes += 1;
+                    voteRecords[userKey][id] = today;
+                    saveData();
+                    renderVoteAndUpload();
+                });
+            });
+        }
+
+        function renderUploads() {
+            const uploadSection = document.getElementById('uploadSection');
+            if (!uploadSection) return;
+
+            let html = '';
+            cats.forEach(cat => {
+                const catUploads = uploads[cat.id] || [];
+                let galleryHtml = '';
+                if (catUploads.length === 0) {
+                    galleryHtml = `<div class="empty-gallery">暂无上传内容，快来分享吧！</div>`;
+                } else {
+                    catUploads.forEach((item, index) => {
+                        const tag = item.type === 'image' ? '📷 照片' : '✏️ 手绘';
+                        galleryHtml += `
+                                <div class="media-item">
+                                    <img src="${item.data}" alt="${item.name}">
+                                    <span class="tag">${tag}</span>
+                                    ${currentUser === item.user || currentRole === 'admin' ? `<button class="delete-btn" data-catid="${cat.id}" data-index="${index}">×</button>` : ''}
+                                </div>
+                            `;
+                    });
+                }
+
+                // 评论
+                const catComments = comments[cat.id] || [];
+                let commentHtml = '';
+                if (catComments.length === 0) {
+                    commentHtml = `<div class="comment-empty">还没有评论，来说点什么吧~</div>`;
+                } else {
+                    catComments.forEach(comment => {
+                        const repliesHtml = (comment.replies || []).map(reply => `
+                                <div class="reply-item">
+                                    <div class="reply-meta">
+                                        <span class="reply-user">${reply.user}</span>
+                                        <span class="reply-time">${reply.time}</span>
+                                    </div>
+                                    <div class="reply-text">${reply.text}</div>
+                                </div>
+                            `).join('');
+                        commentHtml += `
+                                <div class="comment-item" id="comment-${comment.id}">
+                                    <div class="comment-meta">
+                                        <span class="comment-user">${comment.user}</span>
+                                        <span class="comment-time">${comment.time}</span>
+                                        <button class="reply-btn" data-commentid="${comment.id}" data-catid="${cat.id}">回复</button>
+                                    </div>
+                                    <div class="comment-text">${comment.text}</div>
+                                    ${repliesHtml ? `<div class="replies">${repliesHtml}</div>` : ''}
+                                </div>
+                            `;
+                    });
+                }
+
+                html += `
+                        <div class="upload-card">
+                            <div class="cat-header">
+                                <img class="avatar" src="${cat.img}" alt="${cat.name}">
+                                <span class="name">${cat.name}</span>
+                            </div>
+                            <div class="upload-area">
+                                <label for="upload-image-${cat.id}">📷 上传照片</label>
+                                <input type="file" id="upload-image-${cat.id}" accept="image/*" data-catid="${cat.id}" data-type="image">
+                                <label for="upload-drawing-${cat.id}">✏️ 上传手绘</label>
+                                <input type="file" id="upload-drawing-${cat.id}" accept="image/*" data-catid="${cat.id}" data-type="drawing">
+                                <span style="font-size:12px;color:#999;align-self:center;">支持 jpg/png</span>
+                            </div>
+                            <div class="gallery" id="gallery-${cat.id}">
+                                ${galleryHtml}
+                            </div>
+                            <div class="comment-section">
+                                <div class="comment-input-row">
+                                    <textarea placeholder="说点什么..." id="comment-input-${cat.id}" rows="1"></textarea>
+                                    <button class="send-btn" data-catid="${cat.id}">发送</button>
+                                </div>
+                                <div class="comment-list" id="comment-list-${cat.id}">
+                                    ${commentHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            });
+            uploadSection.innerHTML = html;
+
+            // 文件上传
+            document.querySelectorAll('.upload-area input[type="file"]').forEach(input => {
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const catId = parseInt(this.dataset.catid);
+                    const type = this.dataset.type;
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const base64 = ev.target.result;
+                        if (!uploads[catId]) uploads[catId] = [];
+                        uploads[catId].push({
+                            type: type,
+                            data: base64,
+                            name: file.name,
+                            user: currentUser || '匿名',
+                            time: new Date().toLocaleString()
+                        });
+                        saveData();
+                        renderUploads();
+                        document.getElementById(`upload-${type}-${catId}`).value = '';
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            // 删除上传
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const catId = parseInt(this.dataset.catid);
+                    const index = parseInt(this.dataset.index);
+                    if (confirm('确定要删除这条内容吗？')) {
+                        if (uploads[catId] && uploads[catId].length > index) {
+                            uploads[catId].splice(index, 1);
+                            saveData();
+                            renderUploads();
+                        }
+                    }
+                });
+            });
+
+            // 发送评论
+            document.querySelectorAll('.send-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const catId = parseInt(this.dataset.catid);
+                    const input = document.getElementById(`comment-input-${catId}`);
+                    const text = input.value.trim();
+                    if (!text) {
+                        alert('请输入评论内容');
+                        return;
+                    }
+                    if (!comments[catId]) comments[catId] = [];
+                    comments[catId].push({
+                        id: generateId(),
+                        user: currentUser || '匿名',
+                        text: text,
+                        time: new Date().toLocaleString(),
+                        replies: []
+                    });
+                    input.value = '';
+                    saveData();
+                    renderUploads();
+                    const list = document.getElementById(`comment-list-${catId}`);
+                    if (list) list.scrollTop = list.scrollHeight;
+                });
+            });
+
+            // 回复评论
+            document.querySelectorAll('.reply-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const catId = parseInt(this.dataset.catid);
+                    const commentId = this.dataset.commentid;
+                    const replyText = prompt('输入回复内容：');
+                    if (replyText && replyText.trim()) {
+                        const catComments = comments[catId] || [];
+                        const comment = catComments.find(c => c.id === commentId);
+                        if (comment) {
+                            if (!comment.replies) comment.replies = [];
+                            comment.replies.push({
+                                user: currentUser || '匿名',
+                                text: replyText.trim(),
+                                time: new Date().toLocaleString()
+                            });
+                            saveData();
+                            renderUploads();
+                        }
+                    }
+                });
+            });
+
+            // 回车发送
+            document.querySelectorAll('.comment-input-row textarea').forEach(textarea => {
+                textarea.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        const catId = parseInt(this.id.split('-')[2]);
+                        const btn = document.querySelector(`.send-btn[data-catid="${catId}"]`);
+                        if (btn) btn.click();
+                    }
+                });
+            });
+        }
+
+        // ================================================================
+        // 更新人气猫
+        // ================================================================
+        function updatePopularCat() {
+            const display = document.getElementById('popularCatDisplay');
+            if (!display || cats.length === 0) return;
+            const top = cats.reduce((a, b) => a.votes > b.votes ? a : b);
+            const userKey = currentUser || 'anonymous';
+            const today = new Date().toDateString();
+            const userVotes = voteRecords[userKey] || {};
+            let votedCount = 0;
+            for (let key in userVotes) {
+                if (userVotes[key] === today) votedCount++;
+            }
+            display.textContent = `🏆 人气猫: ${top.name} (${top.votes}票) · 今日已投: ${votedCount}/1`;
+        }
+
+        // ================================================================
+        // AI 助手
+        // ================================================================
+        const aiResponse = document.getElementById('aiResponse');
+        const aiAskBtn = document.getElementById('aiAskBtn');
+        const aiQuestion = document.getElementById('aiQuestion');
+
+        async function callFreeAI(question) {
+            const url = 'https://api.chatanywhere.tech/v1/chat/completions';
+            const headers = { 'Content-Type': 'application/json' };
+            const body = {
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    { role: 'system', content: '你是一个猫咪护理专家，回答关于猫咪的问题，语气温暖专业。' },
+                    { role: 'user', content: question }
+                ],
+                temperature: 0.7,
+                max_tokens: 600
+            };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            });
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`API错误 (${response.status}): ${errText}`);
+            }
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        aiAskBtn.addEventListener('click', async function() {
+            const question = aiQuestion.value.trim();
+            if (!question) {
+                aiResponse.innerHTML = '❓ 请输入你想咨询的问题。';
+                return;
+            }
+            aiResponse.innerHTML = '⏳ 正在思考...';
+            try {
+                const answer = await callFreeAI(question);
+                aiResponse.innerHTML = `🤖 ${answer}`;
+            } catch (error) {
+                console.error(error);
+                aiResponse.innerHTML = `❌ 请求失败: ${error.message}`;
+            }
+        });
+
+        aiQuestion.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                aiAskBtn.click();
+            }
+        });
+
+        console.log('✅ 平台加载完成');
+        console.log('👤 管理员账号: admin / 密码: admin123');
+    </script>
 </body>
 </html>
