@@ -3,29 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>猫咪档案 | 校园流浪猫守护站</title>
+    <title>猫咪档案</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑;}
-        body{background:#f7f8fa;color:#333;}
-        /* 导航 */
+        body{background:#f7f8fa;}
         .nav{background:#222;color:#fff;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:99;}
         .nav a{color:#fff;text-decoration:none;margin:0 15px;}
-        .nav a:hover,.nav a.active{color:#ffb700;}
-        /* 容器 */
-        .container{max-width:1200px;margin:40px auto;padding:0 20px;}
-        .title{text-align:center;font-size:30px;margin:50px 0 30px;color:#222;}
-        /* 猫咪卡片 */
-        .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:25px;}
-        .cat-card{background:#fff;border-radius:12px;box-shadow:0 3px 15px #eee;overflow:hidden;}
-        .cat-card img{width:100%;height:200px;object-fit:cover;}
-        .cat-info{padding:18px;}
-        .cat-info h3{font-size:20px;}
-        .tag{display:inline-block;padding:4px 12px;background:#e1f5fe;color:#0288d1;border-radius:20px;font-size:12px;margin-top:10px;}
-        footer{text-align:center;padding:30px;background:#222;color:#fff;margin-top:60px;}
+        .nav a.active{color:#ffc107;}
+        .container{max-width:1200px;margin:50px auto;padding:0 20px;}
+        h2{text-align:center;font-size:30px;margin-bottom:40px;}
+        .cat-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:25px;}
+        .item{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px #eee;}
+        .item img{width:100%;height:200px;object-fit:cover;}
+        .info{padding:20px;}
+        footer{text-align:center;padding:30px;background:#222;color:#fff;margin-top:80px;}
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
     <div class="nav">
         <h2>校园流浪猫守护站</h2>
         <div>
@@ -34,47 +28,39 @@
             <a href="about.html">参与方式</a>
         </div>
     </div>
-
     <div class="container">
-        <h2 class="title">校园常驻猫咪档案</h2>
-        <div class="cat-grid">
-            <div class="cat-card">
-                <img src="https://picsum.photos/id/1074/400/250" alt="橘猫大橘">
-                <div class="cat-info">
+        <h2>校园猫咪详情档案</h2>
+        <div class="cat-list">
+            <div class="item">
+                <img src="https://picsum.photos/id/1074/400/220">
+                <div class="info">
                     <h3>大橘</h3>
-                    <p>性格温顺亲人，常在操场晒太阳，喜欢蹭同学的腿</p>
-                    <span class="tag">亲人猫 · 已绝育</span>
+                    <p>性格温顺亲人，喜欢晒太阳，人缘最好</p>
                 </div>
             </div>
-            <div class="cat-card">
-                <img src="https://picsum.photos/id/40/400/250" alt="狸花猫">
-                <div class="cat-info">
-                    <h3>狸花</h3>
-                    <p>警惕性高，常在图书馆附近活动，只吃固定投喂点的猫粮</p>
-                    <span class="tag">警惕猫 · 未绝育</span>
+            <div class="item">
+                <img src="https://picsum.photos/id/40/400/220">
+                <div class="info">
+                    <h3>狸花猫</h3>
+                    <p>身手敏捷，警惕性高，很少亲近陌生人</p>
                 </div>
             </div>
-            <div class="cat-card">
-                <img src="https://picsum.photos/id/169/400/250" alt="三花猫">
-                <div class="cat-info">
-                    <h3>三花</h3>
-                    <p>胆子很小，但熟悉后会主动蹭人，喜欢躲在教学楼角落</p>
-                    <span class="tag">胆小猫 · 已绝育</span>
+            <div class="item">
+                <img src="https://picsum.photos/id/169/400/220">
+                <div class="info">
+                    <h3>三花猫</h3>
+                    <p>胆小内敛，熟悉之后十分黏人</p>
                 </div>
             </div>
-            <div class="cat-card">
-                <img src="https://picsum.photos/id/237/400/250" alt="小黑">
-                <div class="cat-info">
+            <div class="item">
+                <img src="https://picsum.photos/id/237/400/220">
+                <div class="info">
                     <h3>小黑</h3>
-                    <p>高冷帅气，夜间出没，不常靠近人，需要慢慢熟悉</p>
-                    <span class="tag">高冷猫 · 已绝育</span>
+                    <p>高冷独立，夜晚经常出没活动</p>
                 </div>
             </div>
         </div>
     </div>
-
-    <footer>
-        校园流浪猫守护平台 · 用心守护每一只小生命
-    </footer>
+    <footer>爱心守护每一只校园小生灵</footer>
 </body>
 </html>
