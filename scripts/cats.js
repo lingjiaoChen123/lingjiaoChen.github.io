@@ -4,11 +4,17 @@
 
 function renderCats() {
     const catListEl = document.getElementById('catList');
-    if (!catListEl) return;
+    if (!catListEl) {
+        console.warn('catList 元素未找到');
+        return;
+    }
+    
+    // 使用全局 cats
+    const catsData = window.cats || cats;
     
     let html = '';
-    cats.forEach(cat => {
-        const feedbackList = (feedbacks[cat.id] || []).map(f => `<div>• ${f}</div>`).join('');
+    catsData.forEach(cat => {
+        const feedbackList = ((window.feedbacks || feedbacks)[cat.id] || []).map(f => `<div>• ${f}</div>`).join('');
         html += `
             <div class="cat-card" data-catid="${cat.id}">
                 <img src="${cat.img}" alt="${cat.name}">
@@ -20,7 +26,7 @@ function renderCats() {
                 <div class="actions">
                     <button class="feedback-toggle" data-id="${cat.id}">💬 反馈</button>
                     <button class="adopt-btn" data-id="${cat.id}">🏠 领养</button>
-                    ${currentRole === 'admin' ? `<span style="font-size:11px;background:#d6c4b0;padding:0 10px;border-radius:40px;">📩 ${feedbacks[cat.id]?feedbacks[cat.id].length:0}条</span>` : ''}
+                    ${window.currentRole === 'admin' || currentRole === 'admin' ? `<span style="font-size:11px;background:#d6c4b0;padding:0 10px;border-radius:40px;">📩 ${((window.feedbacks || feedbacks)[cat.id] || []).length}条</span>` : ''}
                 </div>
                 <div class="feedback-box" id="feedback-${cat.id}" style="display:none;">
                     <textarea placeholder="添加关于 ${cat.name} 的反馈..." rows="2"></textarea>
@@ -49,12 +55,14 @@ function renderCats() {
             const textarea = area.querySelector('textarea');
             const val = textarea.value.trim();
             if (val) {
-                if (!feedbacks[id]) feedbacks[id] = [];
-                feedbacks[id].push(val);
+                const fb = window.feedbacks || feedbacks;
+                if (!fb[id]) fb[id] = [];
+                fb[id].push(val);
                 textarea.value = '';
-                saveData();
+                if (typeof window.saveData === 'function') window.saveData();
                 renderCats();
-                if (currentRole === 'admin') alert('📬 管理员收到新反馈');
+                const role = window.currentRole || currentRole;
+                if (role === 'admin') alert('📬 管理员收到新反馈');
             } else {
                 alert('请输入反馈内容');
             }
@@ -65,7 +73,8 @@ function renderCats() {
     document.querySelectorAll('.adopt-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = parseInt(this.dataset.id);
-            const cat = cats.find(c => c.id === id);
+            const catsData = window.cats || cats;
+            const cat = catsData.find(c => c.id === id);
             if (!cat) return;
             showAdoptModal(cat);
         });
@@ -99,7 +108,8 @@ function showAdoptModal(cat) {
         if (name && phone && addr && reason) {
             alert(`✅ 领养申请已提交给管理员！ (${cat.name})`);
             container.innerHTML = '';
-            if (currentRole === 'admin') {
+            const role = window.currentRole || currentRole;
+            if (role === 'admin') {
                 alert('📋 管理员收到新的领养申请');
             }
         } else {
@@ -113,3 +123,7 @@ function showAdoptModal(cat) {
         if (e.target === this) container.innerHTML = '';
     });
 }
+
+// 暴露全局
+window.renderCats = renderCats;
+window.showAdoptModal = showAdoptModal;
