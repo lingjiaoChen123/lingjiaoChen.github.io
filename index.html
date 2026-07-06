@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>校园流浪猫互动平台</title>
+    <title>校园流浪猫守护站 - 首页</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑;}
         body{background:#f7f8fa;color:#333;}
         /* 导航 */
         .nav{background:#222;color:#fff;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:99;}
         .nav a{color:#fff;text-decoration:none;margin:0 15px;}
-        .nav a:hover{color:#ffb700;}
+        .nav a:hover,.nav a.active{color:#ffb700;}
         /* 轮播 */
         .banner{width:100%;height:450px;background:url(https://picsum.photos/1920/800) center/cover;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;}
         .banner h1{font-size:42px;text-shadow:2px 2px 6px #000;}
@@ -49,13 +49,11 @@
 <body>
     <!-- 导航栏 -->
     <div class="nav">
-        <h2>校园流浪猫守护平台</h2>
+        <h2>校园流浪猫守护站</h2>
         <div>
-            <a href="#home">首页</a>
-            <a href="#catList">猫咪列表</a>
-            <a href="#rank">喜爱排名</a>
-            <a href="#upload">图片上传</a>
-            <a href="#ai">智能问答</a>
+            <a href="index.html" class="active">首页</a>
+            <a href="cats.html">猫咪档案</a>
+            <a href="about.html">参与方式</a>
         </div>
     </div>
 
@@ -101,7 +99,7 @@
     </div>
 
     <footer>
-        校园流浪猫互动平台 · 集投票排名、图片分享、智能问答一体
+        校园流浪猫守护平台 · 集投票排名、图片分享、智能问答一体
     </footer>
 
 <script>
