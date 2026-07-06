@@ -13,12 +13,15 @@ function renderVoteAndUpload() {
 function renderVotes() {
     const voteGrid = document.getElementById('voteGrid');
     if (!voteGrid) return;
+    
+    const catsData = window.cats || cats;
     const today = new Date().toDateString();
-    const userKey = currentUser || 'anonymous';
-    const userVotes = voteRecords[userKey] || {};
+    const userKey = window.currentUser || currentUser || 'anonymous';
+    const voteRec = window.voteRecords || voteRecords;
+    const userVotes = voteRec[userKey] || {};
 
     let html = '';
-    const sorted = [...cats].sort((a, b) => b.votes - a.votes);
+    const sorted = [...catsData].sort((a, b) => b.votes - a.votes);
     sorted.forEach(cat => {
         const hasVoted = userVotes[cat.id] === today;
         html += `
@@ -40,27 +43,29 @@ function renderVotes() {
     document.querySelectorAll('.vote-item .vote-btn:not([disabled])').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = parseInt(this.dataset.id);
-            const cat = cats.find(c => c.id === id);
+            const catsData = window.cats || cats;
+            const cat = catsData.find(c => c.id === id);
             if (!cat) return;
 
-            const userKey = currentUser || 'anonymous';
+            const userKey = window.currentUser || currentUser || 'anonymous';
             const today = new Date().toDateString();
-            if (!voteRecords[userKey]) voteRecords[userKey] = {};
-            if (voteRecords[userKey][id] === today) {
+            const voteRec = window.voteRecords || voteRecords;
+            if (!voteRec[userKey]) voteRec[userKey] = {};
+            if (voteRec[userKey][id] === today) {
                 alert('你今天已经给这只猫投过票了！');
                 return;
             }
 
-            for (let key in voteRecords[userKey]) {
-                if (voteRecords[userKey][key] === today) {
+            for (let key in voteRec[userKey]) {
+                if (voteRec[userKey][key] === today) {
                     alert('你今天已经投过票了，每人每天只有一票！');
                     return;
                 }
             }
 
             cat.votes += 1;
-            voteRecords[userKey][id] = today;
-            saveData();
+            voteRec[userKey][id] = today;
+            if (typeof window.saveData === 'function') window.saveData();
             renderVoteAndUpload();
         });
     });
@@ -71,9 +76,15 @@ function renderUploads() {
     const uploadSection = document.getElementById('uploadSection');
     if (!uploadSection) return;
     
+    const catsData = window.cats || cats;
+    const uploadsData = window.uploads || uploads;
+    const commentsData = window.comments || comments;
+    const currentUserVal = window.currentUser || currentUser || '匿名';
+    const currentRoleVal = window.currentRole || currentRole;
+    
     let html = '';
-    cats.forEach(cat => {
-        const catUploads = uploads[cat.id] || [];
+    catsData.forEach(cat => {
+        const catUploads = uploadsData[cat.id] || [];
         let galleryHtml = '';
         if (catUploads.length === 0) {
             galleryHtml = `<div class="empty-gallery">暂无上传内容，快来分享吧！</div>`;
@@ -84,14 +95,14 @@ function renderUploads() {
                     <div class="media-item">
                         <img src="${item.data}" alt="${item.name}">
                         <span class="tag">${tag}</span>
-                        ${currentUser === item.user || currentRole === 'admin' ? `<button class="delete-btn" data-catid="${cat.id}" data-index="${index}">×</button>` : ''}
+                        ${currentUserVal === item.user || currentRoleVal === 'admin' ? `<button class="delete-btn" data-catid="${cat.id}" data-index="${index}">×</button>` : ''}
                     </div>
                 `;
             });
         }
 
         // 评论
-        const catComments = comments[cat.id] || [];
+        const catComments = commentsData[cat.id] || [];
         let commentHtml = '';
         if (catComments.length === 0) {
             commentHtml = `<div class="comment-empty">还没有评论，来说点什么吧~</div>`;
@@ -161,15 +172,16 @@ function renderUploads() {
             const reader = new FileReader();
             reader.onload = function(ev) {
                 const base64 = ev.target.result;
-                if (!uploads[catId]) uploads[catId] = [];
-                uploads[catId].push({
+                const uploadsData = window.uploads || uploads;
+                if (!uploadsData[catId]) uploadsData[catId] = [];
+                uploadsData[catId].push({
                     type: type,
                     data: base64,
                     name: file.name,
-                    user: currentUser || '匿名',
+                    user: window.currentUser || currentUser || '匿名',
                     time: new Date().toLocaleString()
                 });
-                saveData();
+                if (typeof window.saveData === 'function') window.saveData();
                 renderUploads();
                 document.getElementById(`upload-${type}-${catId}`).value = '';
             };
@@ -183,9 +195,10 @@ function renderUploads() {
             const catId = parseInt(this.dataset.catid);
             const index = parseInt(this.dataset.index);
             if (confirm('确定要删除这条内容吗？')) {
-                if (uploads[catId] && uploads[catId].length > index) {
-                    uploads[catId].splice(index, 1);
-                    saveData();
+                const uploadsData = window.uploads || uploads;
+                if (uploadsData[catId] && uploadsData[catId].length > index) {
+                    uploadsData[catId].splice(index, 1);
+                    if (typeof window.saveData === 'function') window.saveData();
                     renderUploads();
                 }
             }
@@ -202,18 +215,18 @@ function renderUploads() {
                 alert('请输入评论内容');
                 return;
             }
-            if (!comments[catId]) comments[catId] = [];
-            comments[catId].push({
-                id: generateId(),
-                user: currentUser || '匿名',
+            const commentsData = window.comments || comments;
+            if (!commentsData[catId]) commentsData[catId] = [];
+            commentsData[catId].push({
+                id: typeof window.generateId === 'function' ? window.generateId() : Date.now().toString(36),
+                user: window.currentUser || currentUser || '匿名',
                 text: text,
                 time: new Date().toLocaleString(),
                 replies: []
             });
             input.value = '';
-            saveData();
+            if (typeof window.saveData === 'function') window.saveData();
             renderUploads();
-            // 滚动到底部
             const list = document.getElementById(`comment-list-${catId}`);
             if (list) list.scrollTop = list.scrollHeight;
         });
@@ -226,16 +239,17 @@ function renderUploads() {
             const commentId = this.dataset.commentid;
             const replyText = prompt('输入回复内容：');
             if (replyText && replyText.trim()) {
-                const catComments = comments[catId] || [];
+                const commentsData = window.comments || comments;
+                const catComments = commentsData[catId] || [];
                 const comment = catComments.find(c => c.id === commentId);
                 if (comment) {
                     if (!comment.replies) comment.replies = [];
                     comment.replies.push({
-                        user: currentUser || '匿名',
+                        user: window.currentUser || currentUser || '匿名',
                         text: replyText.trim(),
                         time: new Date().toLocaleString()
                     });
-                    saveData();
+                    if (typeof window.saveData === 'function') window.saveData();
                     renderUploads();
                 }
             }
@@ -258,14 +272,23 @@ function renderUploads() {
 // ---------- 更新人气猫 ----------
 function updatePopularCat() {
     const display = document.getElementById('popularCatDisplay');
-    if (!display || cats.length === 0) return;
-    const top = cats.reduce((a, b) => a.votes > b.votes ? a : b);
-    const userKey = currentUser || 'anonymous';
+    if (!display) return;
+    const catsData = window.cats || cats;
+    if (catsData.length === 0) return;
+    const top = catsData.reduce((a, b) => a.votes > b.votes ? a : b);
+    const userKey = window.currentUser || currentUser || 'anonymous';
     const today = new Date().toDateString();
-    const userVotes = voteRecords[userKey] || {};
+    const voteRec = window.voteRecords || voteRecords;
+    const userVotes = voteRec[userKey] || {};
     let votedCount = 0;
     for (let key in userVotes) {
         if (userVotes[key] === today) votedCount++;
     }
     display.textContent = `🏆 人气猫: ${top.name} (${top.votes}票) · 今日已投: ${votedCount}/1`;
 }
+
+// 暴露全局
+window.renderVoteAndUpload = renderVoteAndUpload;
+window.updatePopularCat = updatePopularCat;
+window.renderVotes = renderVotes;
+window.renderUploads = renderUploads;
