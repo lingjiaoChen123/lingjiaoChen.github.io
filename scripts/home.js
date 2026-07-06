@@ -11,7 +11,10 @@ let carouselInterval = null;
 
 function setupCarousel() {
     const img = document.getElementById('carouselImg');
-    if (!img) return;
+    if (!img) {
+        console.warn('carouselImg 元素未找到');
+        return;
+    }
     let idx = 0;
     img.src = carouselImages[0];
     if (carouselInterval) clearInterval(carouselInterval);
@@ -21,7 +24,5 @@ function setupCarousel() {
     }, 3000);
 }
 
-// 页面加载时初始化轮播
-document.addEventListener('DOMContentLoaded', function() {
-    // 如果已经登录，轮播会在 enterApp 中启动
-});
+// 暴露全局
+window.setupCarousel = setupCarousel;
